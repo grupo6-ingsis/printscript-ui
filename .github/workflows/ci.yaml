@@ -1,74 +1,53 @@
-permissions:
-  contents: write
-  packages: write
-name: Frontend CI-CD
+name: Build and Push Frontend
 
 on:
   push:
     branches:
       - master
       - dev
-  pull_request:
-    branches:
-      - master
-      - dev
-  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: temurin
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: Run ktlint format
-        run: ./gradlew ktlintFormat
-      - name: Build with Gradle
-        run: ./gradlew build
-  push_to_registry:
-    needs: build
-    runs-on: ubuntu-latest
+          node-version: 18
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Create Short SHA
-        uses: benjlevesque/short-sha@v1.2
-        id: short-sha
-        with:
-          length: 8
+      - name: Build project
+        run: npm run build
 
-      - name: Set up Docker Buildx (multi-platform / builder)
-        uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Login to GHCR
-        uses: docker/login-action@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v4
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
           push: true
-          platforms: linux/amd64
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ steps.short-sha.outputs.sha }}
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.ref_name }}-latest
+
   deploy:
-    needs: push_to_registry
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to VM (main)
@@ -94,4 +73,3 @@ jobs:
             cd ~/infra
             sudo git pull
             ./start-docker.sh
-
