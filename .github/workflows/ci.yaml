@@ -3,9 +3,11 @@ name: Build and Push Frontend
 on:
   push:
     branches:
-      - main
+      - master
       - dev
-
+permissions:
+  contents: read
+  packages: write
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -30,8 +32,6 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}
             ghcr.io/${{ github.repository }}:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
   deploy:
     needs: build-and-push
