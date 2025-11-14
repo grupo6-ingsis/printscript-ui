@@ -34,15 +34,14 @@ jobs:
             ghcr.io/${{ github.repository }}:${{ github.sha }}
 
   deploy:
-    needs: build-and-push
+    needs: push_to_registry
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'  || github.ref == 'refs/heads/dev'
     steps:
       - name: Deploy to VM (main)
         if: github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.VM_PUBLIC_IP }}
+          host: ${{ secrets.VM_PUBLIC_IP_MAIN }}
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.RSA_VM_KEY }}
           script: |
@@ -54,7 +53,7 @@ jobs:
         if: github.ref == 'refs/heads/dev'
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.VM_PUBLIC_IP }}
+          host: ${{ secrets.VM_PUBLIC_IP_DEV }}
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.RSA_VM_KEY }}
           script: |
