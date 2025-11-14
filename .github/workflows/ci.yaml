@@ -34,7 +34,7 @@ jobs:
             ghcr.io/${{ github.repository }}:${{ github.sha }}
 
   deploy:
-    needs: push_to_registry
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to VM (main)
