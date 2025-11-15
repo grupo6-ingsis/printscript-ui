@@ -6,14 +6,17 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import RulesScreen from "./screens/Rules.tsx";
 import {withAuthenticationRequired} from "@auth0/auth0-react";
 
+const ProtectedHome = withAuthenticationRequired(HomeScreen);
+const ProtectedRules = withAuthenticationRequired(RulesScreen);
+
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <HomeScreen/>
+        element: <ProtectedHome/>
     },
     {
         path: '/rules',
-        element: <RulesScreen/>
+        element: <ProtectedRules/>
     }
 ]);
 
@@ -27,4 +30,4 @@ const App = () => {
 }
 
 
-export default withAuthenticationRequired(App);
+export default App;
