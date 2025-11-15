@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   IconButton,
   InputBase,
   Menu,
@@ -15,7 +14,7 @@ import {
 } from "@mui/material";
 import {AddSnippetModal} from "./AddSnippetModal.tsx";
 import {useRef, useState} from "react";
-import {Add, Search} from "@mui/icons-material";
+import { Search} from "@mui/icons-material";
 import {LoadingSnippetRow, SnippetRow} from "./SnippetRow.tsx";
 import {CreateSnippetWithLang, getFileLanguage, Snippet} from "../../utils/snippet.ts";
 import {usePaginationContext} from "../../contexts/paginationContext.tsx";
