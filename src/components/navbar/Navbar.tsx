@@ -46,7 +46,7 @@ export const Navbar = () => {
                                 onClick={() => navigate(`${page.path}`)}
                                 sx={{
                                     my: 2,
-                                    color: 'red',
+                                    color: 'white',
                                     display: 'flex',
                                     justifyContent: "center",
                                     gap: "4px",
