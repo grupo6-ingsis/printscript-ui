@@ -13,6 +13,6 @@ export async function getSnippetsPaginated(page: number, pageSize: number, snipp
         ...(snippetName && { name: snippetName })
     });
 
-    const { data } = await apiClient.get(`/get/filter?${params}`);
+    const { data } = await apiClient.get(`/snippets/get/filter?${params}`);
     return data;
 }
