@@ -5,7 +5,7 @@ import {TestCase} from "../types/TestCase";
 import {TestCaseResult} from "../utils/queries";
 import {FileType} from "../types/FileType";
 import {Rule} from "../types/Rule";
-import {createSnippetFromEditor} from "../api/snippet-service.api.ts";
+import {createSnippetFromEditor, getSnippetsPaginated} from "../api/snippet-service.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
@@ -13,7 +13,7 @@ export class RealSnippetOperations implements SnippetOperations {
         setTokenGetter(getAccessTokenSilently);
     }
     async listSnippetDescriptors(_page: number, _pageSize: number, _snippetName?: string): Promise<PaginatedSnippets> {
-        return await
+        return await getSnippetsPaginated(_page, _pageSize, _snippetName);
     }
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
