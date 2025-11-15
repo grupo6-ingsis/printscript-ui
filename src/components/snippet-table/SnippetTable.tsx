@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   IconButton,
   InputBase,
   Menu,
@@ -14,7 +15,7 @@ import {
 } from "@mui/material";
 import {AddSnippetModal} from "./AddSnippetModal.tsx";
 import {useRef, useState} from "react";
-import { Search} from "@mui/icons-material";
+import {Add, Search} from "@mui/icons-material";
 import {LoadingSnippetRow, SnippetRow} from "./SnippetRow.tsx";
 import {CreateSnippetWithLang, getFileLanguage, Snippet} from "../../utils/snippet.ts";
 import {usePaginationContext} from "../../contexts/paginationContext.tsx";
@@ -86,13 +87,18 @@ export const SnippetTable = (props: SnippetTableProps) => {
               <Search/>
             </IconButton>
           </Box>
-
+          <Button ref={popoverRef} variant="contained" disableRipple sx={{boxShadow: 0}}
+                  onClick={() => setPopoverMenuOpened(true)}>
+            <Add/>
+            Add Snippet
+          </Button>
         </Box>
         <Table size="medium" sx={{borderSpacing: "0 10px", borderCollapse: "separate"}}>
           <TableHead>
             <TableRow sx={{fontWeight: 'bold'}}>
               <StyledTableCell sx={{fontWeight: "bold"}}>Name</StyledTableCell>
               <StyledTableCell sx={{fontWeight: "bold"}}>Language</StyledTableCell>
+              <StyledTableCell sx={{fontWeight: "bold"}}>Author</StyledTableCell>
               <StyledTableCell sx={{fontWeight: "bold"}}>Conformance</StyledTableCell>
             </TableRow>
           </TableHead>
