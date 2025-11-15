@@ -93,7 +93,6 @@ export const SnippetTable = (props: SnippetTableProps) => {
             <TableRow sx={{fontWeight: 'bold'}}>
               <StyledTableCell sx={{fontWeight: "bold"}}>Name</StyledTableCell>
               <StyledTableCell sx={{fontWeight: "bold"}}>Language</StyledTableCell>
-              <StyledTableCell sx={{fontWeight: "bold"}}>Author</StyledTableCell>
               <StyledTableCell sx={{fontWeight: "bold"}}>Conformance</StyledTableCell>
             </TableRow>
           </TableHead>
