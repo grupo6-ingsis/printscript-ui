@@ -12,8 +12,8 @@ export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
         setTokenGetter(getAccessTokenSilently);
     }
-    async listSnippetDescriptors(_page: number, _pageSize: number, _sippetName?: string): Promise<PaginatedSnippets> {
-        throw new Error('Not implemented');
+    async listSnippetDescriptors(_page: number, _pageSize: number, _snippetName?: string): Promise<PaginatedSnippets> {
+        return await
     }
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {

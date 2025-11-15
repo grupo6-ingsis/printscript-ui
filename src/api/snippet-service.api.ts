@@ -5,3 +5,14 @@ export async function createSnippetFromEditor(input: CreateSnippet): Promise<Sni
     const { data } = await apiClient.post('/snippets/create', input);
     return data
 }
+
+export async function getSnippetsPaginated(page: number, pageSize: number, snippetName?: string) { {
+    const params = new URLSearchParams({
+        page: page.toString(),
+        pageSize: pageSize.toString(),
+        ...(snippetName && { name: snippetName })
+    });
+
+    const { data } = await apiClient.get(`/snippets?${params}`);
+    return data;
+}
