@@ -1,4 +1,4 @@
-import {CreateSnippet, Snippet, SnippetApiResponse} from "../utils/snippet.ts";
+import {CreateSnippet, Snippet, SnippetApiResponse, SnippetContentDto} from "../utils/snippet.ts";
 import apiClient from "./apiClient.ts";
 
 export async function createSnippetFromEditor(input: CreateSnippet): Promise<Snippet> {
@@ -42,5 +42,10 @@ export async function getSnippetsPaginated(page: number, pageSize: number, snipp
         page_size: data.size,
         count: data.totalElements,
     };
+}
+
+export async function getSnippetById(snippetId: string): Promise<SnippetContentDto> {
+    const { data } = await apiClient.get(`/snippets/${snippetId}`);
+    return data;
 }
 

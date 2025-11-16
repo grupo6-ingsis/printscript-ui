@@ -1,11 +1,11 @@
 import {SnippetOperations} from '../utils/snippetOperations'
-import {CreateSnippet, PaginatedSnippets, Snippet, UpdateSnippet} from '../utils/snippet'
+import {CreateSnippet, PaginatedSnippets, Snippet, SnippetContentDto, UpdateSnippet} from '../utils/snippet'
 import {PaginatedUsers} from "../utils/users";
 import {TestCase} from "../types/TestCase";
 import {TestCaseResult} from "../utils/queries";
 import {FileType, LanguageVersionDto} from "../types/FileType";
 import {Rule} from "../types/Rule";
-import {createSnippetFromEditor, getSnippetsPaginated} from "../api/snippet.api.ts";
+import {createSnippetFromEditor, getSnippetById, getSnippetsPaginated} from "../api/snippet.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
 
@@ -21,9 +21,24 @@ export class RealSnippetOperations implements SnippetOperations {
         return await createSnippetFromEditor(createSnippet);
     }
 
-    async getSnippetById(_id: string): Promise<Snippet | undefined> {
-        throw new Error('Not implemented');
+    async getSnippetById(id: string): Promise<Snippet | undefined> {
+        const data: SnippetContentDto = await getSnippetById(id);
+        if (!data) {
+            return undefined;
+        }
+        return {
+            id: data.snippet.id,
+            name: data.snippet.title,
+            content: data.content,
+            language: data.snippet.languageVersion.language.name,
+            extension: data.snippet.languageVersion.language.extension,
+            version: data.snippet.languageVersion.version,
+            description: data.snippet.description,
+            compliance: "pending",
+            author: data.snippet.ownerId,
+        };
     }
+
 
     async updateSnippetById(_id: string, _updateSnippet: UpdateSnippet): Promise<Snippet> {
         throw new Error('Not implemented');

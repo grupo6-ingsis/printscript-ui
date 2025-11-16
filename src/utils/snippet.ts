@@ -53,3 +53,8 @@ export type SnippetApiResponse ={
         };
     };
 }
+
+export type SnippetContentDto = {
+    snippet: SnippetApiResponse
+    content: string;
+}
