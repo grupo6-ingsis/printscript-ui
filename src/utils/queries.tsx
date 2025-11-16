@@ -174,7 +174,7 @@ export const useGetFileTypes = () => {
 export const useGetSupportedLanguageVersions = (languageName: string) => {
     const snippetOperations = useSnippetsOperations();
 
-    return useQuery<LanguageVersionDto[], Error>(
+    return useQuery<LanguageVersionDto, Error>(
         ['supportedLanguageVersions', languageName],
         () => snippetOperations.getSupportedLanguageVersions(languageName),
         { enabled: !!languageName }

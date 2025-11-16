@@ -119,14 +119,13 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
                             onChange={(e: SelectChangeEvent<string>) => setSelectedVersion(e.target.value)}
                             sx={{ width: '50%' }}
                         >
-                            {versions.flatMap((v) =>
-                                v.versions.map((version) => (
-                                    <MenuItem key={version} value={version}>
-                                        {version}
-                                    </MenuItem>
-                                ))
-                            )}
+                            {versions.versions.map((version) => (
+                                <MenuItem key={version} value={version}>
+                                    {version}
+                                </MenuItem>
+                            ))}
                         </Select>
+
                     )
                 )}
             </Box>

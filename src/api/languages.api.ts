@@ -6,7 +6,7 @@ export async function getSupportedLanguages(): Promise<FileType[]> {
     return data;
 }
 
-export async function getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto[]> {
+export async function getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto> {
     const { data } = await apiClient.get(`/language-version/supported`, {
         params: { languageName },
     });

@@ -81,7 +81,7 @@ export class RealSnippetOperations implements SnippetOperations {
         throw new Error('Not implemented');
     }
 
-    async getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto[]> {
+    async getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto> {
         return await getSupportedLanguageVersions(languageName);
     }
 }

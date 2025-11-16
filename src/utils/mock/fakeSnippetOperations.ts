@@ -127,7 +127,7 @@ export class FakeSnippetOperations implements SnippetOperations {
       setTimeout(() => resolve(this.fakeStore.modifyLintingRule(newRules)), DELAY)
     })
   }
-    async getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto[]> {
+    async getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto> {
         return await getSupportedLanguageVersions(languageName);
     }
 }

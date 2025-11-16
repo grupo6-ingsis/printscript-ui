@@ -40,6 +40,6 @@ export interface SnippetOperations {
 
   modifyLintingRule(newRules: Rule[]): Promise<Rule[]>
 
-    getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto[]>;
+    getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto>;
 
 }
