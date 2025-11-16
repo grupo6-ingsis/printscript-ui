@@ -20,7 +20,7 @@ import "prismjs/themes/prism-okaidia.css";
 import {Save} from "@mui/icons-material";
 import {CreateSnippet, CreateSnippetWithLang} from "../../utils/snippet.ts";
 import {ModalWrapper} from "../common/ModalWrapper.tsx";
-import {useCreateSnippet, useGetFileTypes} from "../../utils/queries.tsx";
+import {useCreateSnippet, useGetFileTypes, useGetSupportedLanguageVersions} from "../../utils/queries.tsx";
 import {queryClient} from "../../App.tsx";
 
 export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
@@ -29,12 +29,15 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
     defaultSnippet?: CreateSnippetWithLang
 }) => {
     const [language, setLanguage] = useState(defaultSnippet?.language ?? "printscript");
+    const [selectedVersion, setSelectedVersion] = useState<string>("");
     const [code, setCode] = useState(defaultSnippet?.content ?? "");
     const [snippetName, setSnippetName] = useState(defaultSnippet?.name ?? "")
     const {mutateAsync: createSnippet, isLoading: loadingSnippet} = useCreateSnippet({
         onSuccess: () => queryClient.invalidateQueries('listSnippets')
     })
     const {data: fileTypes} = useGetFileTypes();
+    const { data: versions, isLoading: loadingVersions } = useGetSupportedLanguageVersions(language);
+
 
     const handleCreateSnippet = async () => {
         const newSnippet: CreateSnippet = {
@@ -92,17 +95,37 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={language}
-                    label="Age"
                     onChange={(e: SelectChangeEvent<string>) => setLanguage(e.target.value)}
-                    sx={{width: '50%'}}
+                    sx={{ width: '50%' }}
                 >
-                    {
-                        fileTypes?.map(x => (
-                            <MenuItem data-testid={`menu-option-${x.language}`} key={x.language}
-                                      value={x.language}>{capitalize((x.language))}</MenuItem>
-                        ))
-                    }
+                    {fileTypes?.map((x) => (
+                        <MenuItem key={x.language} value={x.language}>
+                            {capitalize(x.language)}
+                        </MenuItem>
+                    ))}
                 </Select>
+                <InputLabel htmlFor="version-select">Versions</InputLabel>
+                {loadingVersions ? (
+                    <CircularProgress />
+                ) : (
+                    versions && (
+                        <Select
+                            labelId="version-select-label"
+                            id="version-select"
+                            value={selectedVersion}
+                            onChange={(e: SelectChangeEvent<string>) => setSelectedVersion(e.target.value)}
+                            sx={{ width: '50%' }}
+                        >
+                            {versions.flatMap((v) =>
+                                v.versions.map((version) => (
+                                    <MenuItem key={version} value={version}>
+                                        {version}
+                                    </MenuItem>
+                                ))
+                            )}
+                        </Select>
+                    )
+                )}
             </Box>
             <InputLabel>Code Snippet</InputLabel>
             <Box width={"100%"} sx={{

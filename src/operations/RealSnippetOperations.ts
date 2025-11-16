@@ -3,11 +3,11 @@ import {CreateSnippet, PaginatedSnippets, Snippet, UpdateSnippet} from '../utils
 import {PaginatedUsers} from "../utils/users";
 import {TestCase} from "../types/TestCase";
 import {TestCaseResult} from "../utils/queries";
-import {FileType} from "../types/FileType";
+import {FileType, LanguageVersionDto} from "../types/FileType";
 import {Rule} from "../types/Rule";
 import {createSnippetFromEditor, getSnippetsPaginated} from "../api/snippet.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
-import {getSupportedLanguages} from "../api/languages.api.ts";
+import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -79,5 +79,9 @@ export class RealSnippetOperations implements SnippetOperations {
 
     async modifyLintingRule(_newRules: Rule[]): Promise<Rule[]> {
         throw new Error('Not implemented');
+    }
+
+    async getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto[]> {
+        return await getSupportedLanguageVersions(languageName);
     }
 }
