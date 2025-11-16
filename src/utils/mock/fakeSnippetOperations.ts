@@ -5,8 +5,9 @@ import autoBind from 'auto-bind'
 import {PaginatedUsers} from "../users.ts";
 import {TestCase} from "../../types/TestCase.ts";
 import {TestCaseResult} from "../queries.tsx";
-import {FileType} from "../../types/FileType.ts";
+import {FileType, LanguageVersionDto} from "../../types/FileType.ts";
 import {Rule} from "../../types/Rule.ts";
+import {getSupportedLanguageVersions} from "../../api/languages.api.ts";
 
 const DELAY: number = 1000
 
@@ -124,4 +125,7 @@ export class FakeSnippetOperations implements SnippetOperations {
       setTimeout(() => resolve(this.fakeStore.modifyLintingRule(newRules)), DELAY)
     })
   }
+    async getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto> {
+        return await getSupportedLanguageVersions(languageName);
+    }
 }

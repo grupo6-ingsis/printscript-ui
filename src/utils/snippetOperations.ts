@@ -2,7 +2,7 @@ import {CreateSnippet, PaginatedSnippets, Snippet, UpdateSnippet} from './snippe
 import {PaginatedUsers} from "./users.ts";
 import {TestCase} from "../types/TestCase.ts";
 import {TestCaseResult} from "./queries.tsx";
-import {FileType} from "../types/FileType.ts";
+import {FileType, LanguageVersionDto} from "../types/FileType.ts";
 import {Rule} from "../types/Rule.ts";
 
 export interface SnippetOperations {
@@ -39,4 +39,7 @@ export interface SnippetOperations {
   modifyFormatRule(newRules: Rule[]): Promise<Rule[]>
 
   modifyLintingRule(newRules: Rule[]): Promise<Rule[]>
+
+    getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto>;
+
 }

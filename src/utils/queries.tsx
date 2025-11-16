@@ -3,7 +3,7 @@ import {CreateSnippet, PaginatedSnippets, Snippet, UpdateSnippet} from './snippe
 import {SnippetOperations} from "./snippetOperations.ts";
 import {PaginatedUsers} from "./users.ts";
 import {TestCase} from "../types/TestCase.ts";
-import {FileType} from "../types/FileType.ts";
+import {FileType, LanguageVersionDto} from "../types/FileType.ts";
 import {Rule} from "../types/Rule.ts";
 import {RealSnippetOperations} from "../operations/RealSnippetOperations.ts";
 import {useAuth0} from "@auth0/auth0-react";
@@ -170,3 +170,13 @@ export const useGetFileTypes = () => {
 
   return useQuery<FileType[], Error>('fileTypes', () => snippetOperations.getFileTypes());
 }
+
+export const useGetSupportedLanguageVersions = (languageName: string) => {
+    const snippetOperations = useSnippetsOperations();
+
+    return useQuery<LanguageVersionDto, Error>(
+        ['supportedLanguageVersions', languageName],
+        () => snippetOperations.getSupportedLanguageVersions(languageName),
+        { enabled: !!languageName }
+    );
+};
