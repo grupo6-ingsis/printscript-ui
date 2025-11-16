@@ -3,7 +3,6 @@ import {v4 as uuid} from 'uuid'
 import {PaginatedUsers} from "../users.ts";
 import {TestCase} from "../../types/TestCase.ts";
 import {TestCaseResult} from "../queries.tsx";
-import {FileType} from "../../types/FileType.ts";
 import {Rule} from "../../types/Rule.ts";
 
 const INITIAL_SNIPPETS: Snippet[] = [
@@ -138,25 +137,6 @@ const fakeTestCases: TestCase[] = [
   },
 ]
 
-export const fileTypes: FileType[] = [
-  {
-    language: "printscript",
-    extension: "prs",
-  },
-  {
-    language: "python",
-    extension: "py",
-  },
-  {
-    language: "java",
-    extension: "java",
-  },
-  {
-    language: 'golang',
-    extension: 'go'
-  }
-]
-
 export class FakeSnippetStore {
   private readonly snippetMap: Map<string, Snippet> = new Map()
   private readonly testCaseMap: Map<string, TestCase> = new Map()
@@ -256,11 +236,6 @@ export class FakeSnippetStore {
   testSnippet(): TestCaseResult {
     return Math.random() > 0.5 ? "success" : "fail"
   }
-
-  getFileTypes(): FileType[] {
-    return fileTypes
-  }
-
   modifyFormattingRule(newRules: Rule[]): Rule[] {
     this.formattingRules = newRules;
     return newRules;

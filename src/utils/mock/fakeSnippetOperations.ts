@@ -110,9 +110,7 @@ export class FakeSnippetOperations implements SnippetOperations {
   }
 
   getFileTypes(): Promise<FileType[]> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.getFileTypes()), DELAY)
-    })
+    throw new Error('Not implemented');
   }
 
   modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
