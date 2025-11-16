@@ -28,7 +28,7 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
     onClose: () => void,
     defaultSnippet?: CreateSnippetWithLang
 }) => {
-    const [language, setLanguage] = useState(defaultSnippet?.language ?? "printscript");
+    const [language, setLanguage] = useState(defaultSnippet?.language ?? "");
     const [selectedVersion, setSelectedVersion] = useState<string>("");
     const [code, setCode] = useState(defaultSnippet?.content ?? "");
     const [snippetName, setSnippetName] = useState(defaultSnippet?.name ?? "")
@@ -38,6 +38,11 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
     const {data: fileTypes} = useGetFileTypes();
     const { data: versions, isLoading: loadingVersions } = useGetSupportedLanguageVersions(language || "");
 
+    useEffect(() => {
+        if (versions?.versions?.length && !selectedVersion) {
+            setSelectedVersion(versions.versions[0]);
+        }
+    }, [versions, selectedVersion]);
 
     const handleCreateSnippet = async () => {
         const newSnippet: CreateSnippet = {
