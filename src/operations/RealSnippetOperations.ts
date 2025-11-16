@@ -71,8 +71,6 @@ export class RealSnippetOperations implements SnippetOperations {
 
     async getFileTypes(): Promise<FileType[]> {
         return await getSupportedLanguages();
-
-
     }
 
     async modifyFormatRule(_newRules: Rule[]): Promise<Rule[]> {
