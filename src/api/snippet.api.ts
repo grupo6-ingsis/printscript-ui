@@ -3,9 +3,14 @@ import apiClient from "./apiClient.ts";
 
 export async function createSnippetFromEditor(input: CreateSnippet): Promise<Snippet> {
     const transformedInput = {
-        ...input,
         title: input.name,
+        description: input.description,
+        language: input.language,
+        content: input.content,
+        version: input.version,
+        extension: input.extension,
     };
+
     const { data } = await apiClient.post('/snippets', transformedInput);
     return data
 }
