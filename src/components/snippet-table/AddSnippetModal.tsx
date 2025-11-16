@@ -36,7 +36,7 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
         onSuccess: () => queryClient.invalidateQueries('listSnippets')
     })
     const {data: fileTypes} = useGetFileTypes();
-    const { data: versions, isLoading: loadingVersions } = useGetSupportedLanguageVersions(language);
+    const { data: versions, isLoading: loadingVersions } = useGetSupportedLanguageVersions(language || "");
 
 
     const handleCreateSnippet = async () => {
