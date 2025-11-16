@@ -16,11 +16,6 @@ const HomeScreen = () => {
   const {page, page_size, count, handleChangeCount} = usePaginationContext()
   const {data, isLoading} = useGetSnippets(page, page_size, snippetName)
 
-    useEffect(() => {
-        console.log("Snippets Data:", data);
-        console.log("Loading State:", isLoading);
-    }, [data, isLoading]);
-
   useEffect(() => {
     if (data?.count && data.count != count) {
       handleChangeCount(data.count)

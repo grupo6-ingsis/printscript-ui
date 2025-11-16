@@ -22,5 +22,11 @@ export async function getSnippetsPaginated(page: number, pageSize: number, snipp
     });
 
     const { data } = await apiClient.get(`/snippets/paginated?${params.toString()}`);
-    return data;
+
+    return {
+        snippets: data.content,
+        page: data.number,
+        page_size: data.size,
+        count: data.totalElements,
+    };
 }
