@@ -2,7 +2,7 @@ import {CreateSnippet, Snippet} from "../utils/snippet.ts";
 import apiClient from "./apiClient.ts";
 
 export async function createSnippetFromEditor(input: CreateSnippet): Promise<Snippet> {
-    const { data } = await apiClient.post('/snippets/create', input);
+    const { data } = await apiClient.post('/snippets', input);
     return data
 }
 
@@ -13,6 +13,6 @@ export async function getSnippetsPaginated(page: number, pageSize: number, snipp
         ...(snippetName && { name: snippetName })
     });
 
-    const { data } = await apiClient.get(`/snippets/get/filter?${params}`);
+    const { data } = await apiClient.get(`/snippets/paginated?${params}`);
     return data;
 }
