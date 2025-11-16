@@ -5,8 +5,9 @@ import {TestCase} from "../types/TestCase";
 import {TestCaseResult} from "../utils/queries";
 import {FileType} from "../types/FileType";
 import {Rule} from "../types/Rule";
-import {createSnippetFromEditor, getSnippetsPaginated} from "../api/snippet-service.api.ts";
+import {createSnippetFromEditor, getSnippetsPaginated} from "../api/snippet.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
+import {getSupportedLanguages} from "../api/languages.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -69,7 +70,9 @@ export class RealSnippetOperations implements SnippetOperations {
     }
 
     async getFileTypes(): Promise<FileType[]> {
-        throw new Error('Not implemented');
+        return await getSupportedLanguages();
+
+
     }
 
     async modifyFormatRule(_newRules: Rule[]): Promise<Rule[]> {

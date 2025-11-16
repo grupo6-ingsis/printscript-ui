@@ -138,7 +138,7 @@ const fakeTestCases: TestCase[] = [
   },
 ]
 
-const fileTypes: FileType[] = [
+export const fileTypes: FileType[] = [
   {
     language: "printscript",
     extension: "prs",
