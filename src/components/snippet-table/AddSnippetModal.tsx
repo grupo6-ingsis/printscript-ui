@@ -30,6 +30,7 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
 }) => {
     const [language, setLanguage] = useState(defaultSnippet?.language ?? "");
     const [selectedVersion, setSelectedVersion] = useState<string>("");
+    const [description, setDescription ] = useState("");
     const [code, setCode] = useState(defaultSnippet?.content ?? "");
     const [snippetName, setSnippetName] = useState(defaultSnippet?.name ?? "")
     const {mutateAsync: createSnippet, isLoading: loadingSnippet} = useCreateSnippet({
@@ -51,7 +52,7 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
             language: language,
             extension: fileTypes?.find((f) => f.language === language)?.extension ?? "prs",
             version: selectedVersion, // Add the selected version here
-            description: ""
+            description: description
         };
         await createSnippet(newSnippet);
         onClose();
@@ -133,6 +134,15 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
 
                     )
                 )}
+            </Box>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px'
+            }}>
+                <InputLabel htmlFor="name">Description</InputLabel>
+                <Input onChange={e => setDescription(e.target.value)} value={description} id="description"
+                       sx={{width: '100%'}}/>
             </Box>
             <InputLabel>Code Snippet</InputLabel>
             <Box width={"100%"} sx={{
