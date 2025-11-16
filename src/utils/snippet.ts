@@ -39,3 +39,17 @@ export type PaginatedSnippets = Pagination & {
 export const getFileLanguage = (fileTypes: FileType[], fileExt?: string) => {
   return fileExt && fileTypes?.find(x => x.extension == fileExt)
 }
+
+export type SnippetApiResponse ={
+    id: string;
+    title: string;
+    description: string;
+    ownerId: string;
+    languageVersion: {
+        version: string;
+        language: {
+            name: string;
+            extension: string;
+        };
+    };
+}
