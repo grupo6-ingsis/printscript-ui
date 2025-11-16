@@ -8,7 +8,6 @@ export async function createSnippetFromEditor(input: CreateSnippet): Promise<Sni
         language: input.language,
         content: input.content,
         version: input.version,
-        extension: input.extension,
     };
 
     const { data } = await apiClient.post('/snippets', transformedInput);
