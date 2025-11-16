@@ -14,6 +14,7 @@ export type CreateSnippet = {
     language: string;
     extension: string;
     version: string; // Add this property
+    description: string;
 };
 
 

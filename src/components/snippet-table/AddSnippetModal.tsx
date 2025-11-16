@@ -45,7 +45,8 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
             content: code,
             language: language,
             extension: fileTypes?.find((f) => f.language === language)?.extension ?? "prs",
-            version: selectedVersion // Add the selected version here
+            version: selectedVersion, // Add the selected version here
+            description: ""
         };
         await createSnippet(newSnippet);
         onClose();

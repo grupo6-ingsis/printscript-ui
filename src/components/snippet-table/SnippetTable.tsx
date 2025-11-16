@@ -41,35 +41,37 @@ export const SnippetTable = (props: SnippetTableProps) => {
   const {createSnackbar} = useSnackbarContext()
   const {data: fileTypes} = useGetFileTypes();
 
-  const handleLoadSnippet = async (target: EventTarget & HTMLInputElement) => {
-    const files = target.files
-    if (!files || !files.length) {
-      createSnackbar('error',"Please select at leat one file")
-      return
-    }
-    const file = files[0]
-    const splitName = file.name.split(".")
-    const fileType = getFileLanguage(fileTypes ?? [], splitName[splitName.length - 1])
-    if (!fileType) {
-      createSnackbar('error', `File type ${splitName[splitName.length - 1]} not supported`)
-      return
-    }
-    file.text().then((text) => {
-      setSnippet({
-        name: splitName[0],
-        content: text,
-        language: fileType.language,
-        extension: fileType.extension
-      })
-    }).catch(e => {
-      console.error(e)
-    }).finally(() => {
-      setAddModalOpened(true)
-      target.value = ""
-    })
-  }
+    const handleLoadSnippet = async (target: EventTarget & HTMLInputElement) => {
+        const files = target.files;
+        if (!files || !files.length) {
+            createSnackbar('error', "Please select at least one file");
+            return;
+        }
+        const file = files[0];
+        const splitName = file.name.split(".");
+        const fileType = getFileLanguage(fileTypes ?? [], splitName[splitName.length - 1]);
+        if (!fileType) {
+            createSnackbar('error', `File type ${splitName[splitName.length - 1]} not supported`);
+            return;
+        }
+        file.text().then((text) => {
+            setSnippet({
+                name: splitName[0],
+                content: text,
+                language: fileType.language,
+                extension: fileType.extension,
+                version: "1.0", // Dejar vacío para que el usuario seleccione en el modal
+                description: "" // Descripción vacía o predeterminada
+            });
+        }).catch(e => {
+            console.error(e);
+        }).finally(() => {
+            setAddModalOpened(true);
+            target.value = "";
+        });
+    };
 
-  function handleClickMenu() {
+    function handleClickMenu() {
     setPopoverMenuOpened(false)
   }
 
