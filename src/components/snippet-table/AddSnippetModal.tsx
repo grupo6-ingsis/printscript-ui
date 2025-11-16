@@ -29,6 +29,7 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
     defaultSnippet?: CreateSnippetWithLang
 }) => {
     const [language, setLanguage] = useState(defaultSnippet?.language ?? "printscript");
+    const [version, setVersion] = useState("");
     const [code, setCode] = useState(defaultSnippet?.content ?? "");
     const [snippetName, setSnippetName] = useState(defaultSnippet?.name ?? "")
     const {mutateAsync: createSnippet, isLoading: loadingSnippet} = useCreateSnippet({
@@ -36,16 +37,13 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
     })
     const {data: fileTypes} = useGetFileTypes();
 
-    const handleCreateSnippet = async () => {
-        const newSnippet: CreateSnippet = {
-            name: snippetName,
-            content: code,
-            language: language,
-            extension: fileTypes?.find((f) => f.language === language)?.extension ?? "prs"
+    const selectedLanguage = fileTypes?.find(f => f.language === language);
+
+    useEffect(() => {
+        if (selectedLanguage?.versions?.length) {
+            setVersion(selectedLanguage.versions[0]);
         }
-        await createSnippet(newSnippet);
-        onClose();
-    }
+    }, [language, selectedLanguage]);
 
     useEffect(() => {
         if (defaultSnippet) {
@@ -54,6 +52,18 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
             setSnippetName(defaultSnippet?.name)
         }
     }, [defaultSnippet]);
+
+    const handleCreateSnippet = async () => {
+        const newSnippet: CreateSnippet = {
+            name: snippetName,
+            content: code,
+            language: language,
+            version: version,
+            extension: fileTypes?.find((f) => f.language === language)?.extension ?? "prs"
+        }
+        await createSnippet(newSnippet);
+        onClose();
+    }
 
     return (
         <ModalWrapper open={open} onClose={onClose}>
@@ -103,7 +113,26 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
                         ))
                     }
                 </Select>
+
+                <InputLabel htmlFor="version">Version</InputLabel>
+                <Select
+                    labelId="version-select-label"
+                    id="version-select"
+                    value={version}
+                    onChange={(e: SelectChangeEvent<string>) => setVersion(e.target.value)}
+                    sx={{width: '50%'}}
+                    disabled={!selectedLanguage?.versions?.length}
+                >
+                    {
+                        selectedLanguage?.versions?.map(v => (
+                            <MenuItem data-testid={`menu-option-${v}`} key={v} value={v}>
+                                {v}
+                            </MenuItem>
+                        ))
+                    }
+                </Select>
             </Box>
+
             <InputLabel>Code Snippet</InputLabel>
             <Box width={"100%"} sx={{
                 backgroundColor: 'black', color: 'white', borderRadius: "8px",

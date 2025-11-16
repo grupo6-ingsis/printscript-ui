@@ -1,4 +1,5 @@
-export type FileType = {
+export interface FileType {
     language: string;
     extension: string;
+    versions: string[];
 }
