@@ -7,14 +7,23 @@ import {Drawer} from "@mui/material";
 import {useGetSnippets} from "../utils/queries.tsx";
 import {usePaginationContext} from "../contexts/paginationContext.tsx";
 import useDebounce from "../hooks/useDebounce.ts";
+import {SnippetFilters} from "../utils/snippet.ts";
 
 const HomeScreen = () => {
   const {id: paramsId} = useParams<{ id: string }>();
   const [searchTerm, setSearchTerm] = useState('');
   const [snippetName, setSnippetName] = useState('');
   const [snippetId, setSnippetId] = useState<string | null>(null)
+  const [filters, setFilters] = useState<SnippetFilters>({
+    accessType: 'ALL',
+    language: '',
+    passedLint: undefined,
+    sortBy: 'NAME',
+    direction: 'DESC'
+  });
+  
   const {page, page_size, count, handleChangeCount} = usePaginationContext()
-  const {data, isLoading} = useGetSnippets(page, page_size, snippetName)
+  const {data, isLoading} = useGetSnippets(page, page_size, snippetName, filters)
 
   useEffect(() => {
     if (data?.count && data.count != count) {
@@ -43,10 +52,20 @@ const HomeScreen = () => {
     setSearchTerm(snippetName);
   };
 
+  const handleFilterChange = (newFilters: Partial<SnippetFilters>) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+  };
+
   return (
       <>
-        <SnippetTable loading={isLoading} handleClickSnippet={setSnippetId} snippets={data?.snippets}
-                      handleSearchSnippet={handleSearchSnippet}/>
+        <SnippetTable 
+          loading={isLoading} 
+          handleClickSnippet={setSnippetId} 
+          snippets={data?.snippets}
+          handleSearchSnippet={handleSearchSnippet}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+        />
         <Drawer open={!!snippetId} anchor={"right"} onClose={handleCloseModal}>
           {snippetId && <SnippetDetail handleCloseModal={handleCloseModal} id={snippetId}/>}
         </Drawer>
@@ -55,4 +74,3 @@ const HomeScreen = () => {
 }
 
 export default withNavbar(HomeScreen);
-

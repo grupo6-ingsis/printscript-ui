@@ -1,5 +1,6 @@
 import {Pagination} from "./pagination.ts";
 import {FileType} from "../types/FileType.ts";
+import {AccessType, DirectionType, SortByType} from "../types/FilterTypes.ts";
 
 export type ComplianceEnum =
     'pending' |
@@ -57,4 +58,12 @@ export type SnippetApiResponse ={
 export type SnippetContentDto = {
     snippet: SnippetApiResponse
     content: string;
+}
+
+export type SnippetFilters = {
+    accessType?: AccessType;
+    language?: string;
+    passedLint?: boolean;
+    sortBy?: SortByType;
+    direction?: DirectionType;
 }

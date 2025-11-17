@@ -1,4 +1,4 @@
-import {SnippetOperations} from '../utils/snippetOperations'
+import {SnippetFilters, SnippetOperations} from '../utils/snippetOperations'
 import {CreateSnippet, PaginatedSnippets, Snippet, SnippetContentDto, UpdateSnippet} from '../utils/snippet'
 import {PaginatedUsers} from "../utils/users";
 import {TestCase} from "../types/TestCase";
@@ -19,8 +19,8 @@ export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
         setTokenGetter(getAccessTokenSilently);
     }
-    async listSnippetDescriptors(_page: number, _pageSize: number, _snippetName?: string): Promise<PaginatedSnippets> {
-        return await getSnippetsPaginated(_page, _pageSize, _snippetName);
+    async listSnippetDescriptors(_page: number, _pageSize: number, _snippetName?: string, _filters?: SnippetFilters): Promise<PaginatedSnippets> {
+        return await getSnippetsPaginated(_page, _pageSize, _snippetName, _filters);
     }
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
