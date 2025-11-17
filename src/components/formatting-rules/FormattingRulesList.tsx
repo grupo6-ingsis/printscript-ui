@@ -27,13 +27,14 @@ const FormattingRulesList = () => {
   const handleValueChange = (rule: Rule, newValue: string | number) => {
     const newRules = rules?.map(r => {
       if (r.name === rule.name) {
-        return {...r, value: newValue}
+        return {...r, value: String(newValue)}
       } else {
         return r;
       }
     })
     setRules(newRules)
   };
+
 
   const handleNumberChange = (rule: Rule) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(event.target.value, 10);

@@ -43,7 +43,7 @@ const LintingRulesList = () => {
   const handleValueChange = (rule: Rule, newValue: string | number) => {
     const newRules = rules?.map(r => {
       if (r.name === rule.name) {
-        return {...r, value: newValue}
+        return {...r, value: String(newValue)}
       } else {
         return r;
       }
@@ -59,17 +59,15 @@ const LintingRulesList = () => {
   const toggleRule = (rule: Rule) => () => {
     const newRules = rules?.map(r => {
       if (r.name === rule.name) {
-        // If activating a rule that requires a value but doesn't have one, set a default
-        let newValue = r.value;
+        let newValue: string | null | undefined = r.value;
         if (!r.isActive && r.hasValue && (r.value === null || r.value === undefined || r.value === '')) {
-          // If there are options, use the first one
           if (r.valueOptions && r.valueOptions.length > 0) {
             newValue = r.valueOptions[0];
           } else {
             newValue = '';
           }
         }
-        
+
         return {...r, isActive: !r.isActive, value: newValue}
       } else {
         return r;
@@ -77,6 +75,7 @@ const LintingRulesList = () => {
     })
     setRules(newRules)
   }
+
 
   const handleSave = () => {
     // Validate rules with hasValue before saving
