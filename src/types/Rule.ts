@@ -18,3 +18,4 @@ export type LintConfigDto = {
     rules?: LintRuleDto,
     ruleValue?: string,
 }
+

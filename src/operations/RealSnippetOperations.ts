@@ -13,7 +13,7 @@ import {
 } from "../api/snippet.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
-import {getLintingRules, getUserLintingRules} from "../api/linting.api.ts";
+import {activateRule, deactivateRule, getLintingRules, getUserLintingRules} from "../api/linting.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -111,9 +111,22 @@ export class RealSnippetOperations implements SnippetOperations {
         throw new Error('Not implemented');
     }
 
-    async modifyLintingRule(_newRules: Rule[]): Promise<Rule[]> {
-        throw new Error('Not implemented');
+    async modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
+        const userActiveRules: LintConfigDto[] = await getUserLintingRules();
+        for (const rule of newRules) {
+            const wasActive = userActiveRules.find(r => r.id === rule.id);
+
+            if (rule.isActive && !wasActive) {
+                await activateRule(rule);
+            } else if (!rule.isActive && wasActive) {
+                await deactivateRule(rule.id);
+            } else if (rule.isActive && wasActive && rule.value !== wasActive.ruleValue) {
+                await activateRule(rule);
+            }
+        }
+        return this.getLintingRules();
     }
+
 
     async getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto> {
         return await getSupportedLanguageVersions(languageName);
