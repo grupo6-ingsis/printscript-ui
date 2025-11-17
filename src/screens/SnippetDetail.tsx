@@ -114,7 +114,10 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
                 </IconButton>
               </Tooltip>
               <Tooltip title={"Save changes"}>
-                <IconButton color={"primary"} onClick={() => updateSnippet({id: id, updateSnippet: {content: code}})} disabled={isUpdateSnippetLoading || snippet?.content === code} >
+                <IconButton color={"primary"} onClick={() => {
+                  console.log('Save button clicked', {id, code, snippetContent: snippet?.content});
+                  updateSnippet({id: id, updateSnippet: {content: code}});
+                }} disabled={isUpdateSnippetLoading || snippet?.content === code} >
                   <Save />
                 </IconButton>
               </Tooltip>

@@ -18,7 +18,7 @@ export const useSnippetsOperations = () => {
               console.log(token)
           })
           .catch(error => console.error(error));
-  });
+  }, [getAccessTokenSilently]);
 
   const snippetOperations: SnippetOperations = new RealSnippetOperations(getAccessTokenSilently);
 
