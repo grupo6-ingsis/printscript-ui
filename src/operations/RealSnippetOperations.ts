@@ -73,6 +73,7 @@ export class RealSnippetOperations implements SnippetOperations {
                 name: rule.name,
                 isActive: !!activeRule,
                 value: activeRule?.ruleValue ?? null,
+                hasValue: rule.hasValue,
             };
         });
     }
