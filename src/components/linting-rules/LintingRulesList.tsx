@@ -71,19 +71,23 @@ const LintingRulesList = () => {
                 onChange={toggleRule(rule)}
               />
               <ListItemText primary={rule.name} />
-              {typeof rule.value === 'number' ?
-                (<TextField
-                  type="number"
-                  variant={"standard"}
-                  value={rule.value}
-                  onChange={handleNumberChange(rule)}
-                />) : typeof rule.value === 'string' ?
-                  (<TextField
-                    variant={"standard"}
-                    value={rule.value}
-                    onChange={e => handleValueChange(rule, e.target.value)}
-                  />) : null
-              }
+                {rule.hasValue && (
+                    typeof rule.value === 'number' ? (
+                        <TextField
+                            type="number"
+                            variant="standard"
+                            value={rule.value}
+                            onChange={handleNumberChange(rule)}
+                        />
+                    ) : typeof rule.value === 'string' ? (
+                        <TextField
+                            variant="standard"
+                            value={rule.value}
+                            onChange={e => handleValueChange(rule, e.target.value)}
+                        />
+                    ) : null
+                )}
+
             </ListItem>
           )
         })}

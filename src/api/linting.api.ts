@@ -11,13 +11,8 @@ export async function getUserLintingRules(): Promise<LintConfigDto[]> {
     return data;
 }
 
-export async function activateRule(request : Rule): Promise<LintConfigDto>{
+export async function modifyRule(request : Rule): Promise<LintConfigDto>{
     const { data } = await apiClient.post(`/lintconfig`, request);
     return data;
 }
 
-export async function deactivateRule(lintRuleId: string): Promise<void>{
-    await apiClient.delete(`/lintconfig`, {
-        params: { lintRuleId }
-    });
-}

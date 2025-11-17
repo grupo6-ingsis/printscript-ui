@@ -13,7 +13,7 @@ import {
 } from "../api/snippet.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
-import {activateRule, deactivateRule, getLintingRules, getUserLintingRules} from "../api/linting.api.ts";
+import {getLintingRules, getUserLintingRules, modifyRule} from "../api/linting.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -113,19 +113,26 @@ export class RealSnippetOperations implements SnippetOperations {
 
     async modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
         const userActiveRules: LintConfigDto[] = await getUserLintingRules();
+
         for (const rule of newRules) {
             const wasActive = userActiveRules.find(r => r.id === rule.id);
 
+            // Activate
             if (rule.isActive && !wasActive) {
-                await activateRule(rule);
-            } else if (!rule.isActive && wasActive) {
-                await deactivateRule(rule.id);
-            } else if (rule.isActive && wasActive && rule.value !== wasActive.ruleValue) {
-                await activateRule(rule);
+                await modifyRule(rule);
+            }
+            // Deactivate
+            else if (!rule.isActive && wasActive) {
+                await modifyRule({ ...rule, isActive: false });
+            }
+            // Update value
+            else if (rule.isActive && wasActive && rule.value !== wasActive.ruleValue) {
+                await modifyRule(rule);
             }
         }
         return this.getLintingRules();
     }
+
 
 
     async getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto> {
