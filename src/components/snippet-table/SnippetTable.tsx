@@ -92,6 +92,7 @@ export const SnippetTable = (props: SnippetTableProps) => {
                 inputProps={{'aria-label': 'search'}}
                 onChange={e => handleSearchSnippet(e.target.value)}
             />
+              
             <IconButton type="button" sx={{p: '10px'}} aria-label="search">
               <Search/>
             </IconButton>
