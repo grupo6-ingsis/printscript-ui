@@ -2,10 +2,15 @@ import {SnippetOperations} from '../utils/snippetOperations'
 import {CreateSnippet, PaginatedSnippets, Snippet, SnippetContentDto, UpdateSnippet} from '../utils/snippet'
 import {PaginatedUsers} from "../utils/users";
 import {TestCase} from "../types/TestCase";
-import {TestCaseResult} from "../utils/queries";
+import {TestCaseResult, useUpdateSnippetById} from "../utils/queries";
 import {FileType, LanguageVersionDto} from "../types/FileType";
 import {Rule} from "../types/Rule";
-import {createSnippetFromEditor, getSnippetById, getSnippetsPaginated} from "../api/snippet.api.ts";
+import {
+    createSnippetFromEditor,
+    getSnippetById,
+    getSnippetsPaginated,
+    updateSnippetContent
+} from "../api/snippet.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
 
@@ -41,7 +46,7 @@ export class RealSnippetOperations implements SnippetOperations {
 
 
     async updateSnippetById(_id: string, _updateSnippet: UpdateSnippet): Promise<Snippet> {
-        throw new Error('Not implemented');
+        return await updateSnippetContent(_id, _updateSnippet.content)
     }
 
     async getUserFriends(_name?: string, _page?: number, _pageSize?: number): Promise<PaginatedUsers> {
