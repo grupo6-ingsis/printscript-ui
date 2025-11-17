@@ -1,36 +1,41 @@
 import {
-  Box,
-  Button,
-  IconButton,
-  InputBase,
-  Menu,
-  MenuItem,
-  styled,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TablePagination,
-  TableRow
+    Box,
+    Button, capitalize,
+    FormControl,
+    IconButton,
+    InputBase,
+    InputLabel,
+    Menu,
+    MenuItem, Select,
+    styled,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TablePagination,
+    TableRow
 } from "@mui/material";
 import {AddSnippetModal} from "./AddSnippetModal.tsx";
 import {useRef, useState} from "react";
 import {Add, Search} from "@mui/icons-material";
 import {LoadingSnippetRow, SnippetRow} from "./SnippetRow.tsx";
-import {CreateSnippetWithLang, getFileLanguage, Snippet} from "../../utils/snippet.ts";
+import {CreateSnippetWithLang, getFileLanguage, Snippet, SnippetFilters} from "../../utils/snippet.ts";
 import {usePaginationContext} from "../../contexts/paginationContext.tsx";
 import {useSnackbarContext} from "../../contexts/snackbarContext.tsx";
 import {useGetFileTypes} from "../../utils/queries.tsx";
+import {AccessType, DirectionType, SortByType} from "../../types/FilterTypes.ts";
 
 type SnippetTableProps = {
   handleClickSnippet: (id: string) => void;
   snippets?: Snippet[];
   loading: boolean;
   handleSearchSnippet: (snippetName: string) => void;
+  filters: SnippetFilters;
+  onFilterChange: (filters: Partial<SnippetFilters>) => void;
 }
 
 export const SnippetTable = (props: SnippetTableProps) => {
-  const {snippets, handleClickSnippet, loading,handleSearchSnippet} = props;
+  const {snippets, handleClickSnippet, loading, handleSearchSnippet, filters, onFilterChange} = props;
   const [addModalOpened, setAddModalOpened] = useState(false);
   const [popoverMenuOpened, setPopoverMenuOpened] = useState(false)
   const [snippet, setSnippet] = useState<CreateSnippetWithLang | undefined>()
@@ -75,13 +80,15 @@ export const SnippetTable = (props: SnippetTableProps) => {
     setPopoverMenuOpened(false)
   }
 
+  const languages = fileTypes?.map(ft => ft.language) || [];
+
   return (
       <>
-        <Box display="flex" flexDirection="row" justifyContent="space-between">
-          <Box sx={{background: 'white', width: '30%', display: 'flex'}}>
+        <Box display="flex" flexDirection="row" justifyContent="space-between" gap={2} mb={2}>
+          <Box sx={{background: 'white', width: '25%', display: 'flex'}}>
             <InputBase
                 sx={{ml: 1, flex: 1}}
-                placeholder="Search FileType"
+                placeholder="Search Snippet"
                 inputProps={{'aria-label': 'search'}}
                 onChange={e => handleSearchSnippet(e.target.value)}
             />
@@ -89,7 +96,80 @@ export const SnippetTable = (props: SnippetTableProps) => {
               <Search/>
             </IconButton>
           </Box>
-          <Button ref={popoverRef} variant="contained" disableRipple sx={{boxShadow: 0}}
+          
+          <Box display="flex" gap={1} flexGrow={1}>
+            <FormControl size="small" sx={{ minWidth: 120, background: 'white' }}>
+              <InputLabel>Access Type</InputLabel>
+              <Select
+                value={filters.accessType || 'ALL'}
+                label="Access Type"
+                onChange={(e) => onFilterChange({ accessType: e.target.value as AccessType })}
+              >
+                <MenuItem value="ALL">All</MenuItem>
+                <MenuItem value="OWNER">Owner</MenuItem>
+                <MenuItem value="SHARED">Shared</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl size="small" sx={{ minWidth: 120, background: 'white' }}>
+              <InputLabel>Language</InputLabel>
+              <Select
+                value={filters.language || ''}
+                label="Language"
+                onChange={(e) => onFilterChange({ language: e.target.value })}
+              >
+                <MenuItem value="">All</MenuItem>
+                {languages.map((lang) => (
+                  <MenuItem key={lang} value={lang}>{capitalize(lang)}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl size="small" sx={{ minWidth: 120, background: 'white' }}>
+              <InputLabel>Compliance</InputLabel>
+              <Select
+                value={filters.passedLint === undefined ? 'all' : filters.passedLint.toString()}
+                label="Compliance"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  onFilterChange({ 
+                    passedLint: value === 'all' ? undefined : value === 'true' 
+                  });
+                }}
+              >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="true">Passed</MenuItem>
+                <MenuItem value="false">Failed</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl size="small" sx={{ minWidth: 120, background: 'white' }}>
+              <InputLabel>Sort By</InputLabel>
+              <Select
+                value={filters.sortBy || 'NAME'}
+                label="Sort By"
+                onChange={(e) => onFilterChange({ sortBy: e.target.value as SortByType })}
+              >
+                <MenuItem value="NAME">Name</MenuItem>
+                <MenuItem value="LANGUAGE">Language</MenuItem>
+                <MenuItem value="PASSED_LINT">Compliance</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl size="small" sx={{ minWidth: 100, background: 'white' }}>
+              <InputLabel>Order</InputLabel>
+              <Select
+                value={filters.direction || 'DESC'}
+                label="Order"
+                onChange={(e) => onFilterChange({ direction: e.target.value as DirectionType })}
+              >
+                <MenuItem value="ASC">ASC</MenuItem>
+                <MenuItem value="DESC">DESC</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+            <Button ref={popoverRef} variant="contained" disableRipple sx={{boxShadow: 0}}
                   onClick={() => setPopoverMenuOpened(true)}>
             <Add/>
             Add Snippet

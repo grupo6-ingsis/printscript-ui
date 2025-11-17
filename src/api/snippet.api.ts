@@ -1,4 +1,4 @@
-import {CreateSnippet, Snippet, SnippetApiResponse, SnippetContentDto} from "../utils/snippet.ts";
+import {CreateSnippet, Snippet, SnippetApiResponse, SnippetContentDto, SnippetFilters} from "../utils/snippet.ts";
 import apiClient from "./apiClient.ts";
 
 export async function createSnippetFromEditor(input: CreateSnippet): Promise<Snippet> {
@@ -14,11 +14,21 @@ export async function createSnippetFromEditor(input: CreateSnippet): Promise<Sni
     return data
 }
 
-export async function getSnippetsPaginated(page: number, pageSize: number, snippetName?: string) {
+export async function getSnippetsPaginated(
+    page: number, 
+    pageSize: number, 
+    snippetName?: string,
+    filters?: SnippetFilters
+) {
     const params = new URLSearchParams({
         page: page.toString(),
         pageSize: pageSize.toString(),
-        ...(snippetName && { name: snippetName })
+        ...(snippetName && { name: snippetName }),
+        ...(filters?.accessType && { accessType: filters.accessType }),
+        ...(filters?.language && { language: filters.language }),
+        ...(filters?.passedLint !== undefined && { passedLint: filters.passedLint.toString() }),
+        ...(filters?.sortBy && { sortBy: filters.sortBy }),
+        ...(filters?.direction && { direction: filters.direction }),
     });
 
     const { data } = await apiClient.get(`/snippets/paginated?${params.toString()}`);
