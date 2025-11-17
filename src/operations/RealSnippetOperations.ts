@@ -2,7 +2,7 @@ import {SnippetOperations} from '../utils/snippetOperations'
 import {CreateSnippet, PaginatedSnippets, Snippet, SnippetContentDto, UpdateSnippet} from '../utils/snippet'
 import {PaginatedUsers} from "../utils/users";
 import {TestCase} from "../types/TestCase";
-import {TestCaseResult, useUpdateSnippetById} from "../utils/queries";
+import {TestCaseResult} from "../utils/queries";
 import {FileType, LanguageVersionDto} from "../types/FileType";
 import {Rule} from "../types/Rule";
 import {
