@@ -67,7 +67,7 @@ export class RealSnippetOperations implements SnippetOperations {
         const userActiveRules: LintConfigDto[] = await getUserLintingRules();
 
         return allRules.map(rule => {
-            const activeRule = userActiveRules.find(userRule => userRule.rules?.id === rule.id);
+            const activeRule = userActiveRules.find(userRule => userRule.lintRule?.id === rule.id);
             return {
                 id: rule.id,
                 name: rule.name,
@@ -117,20 +117,21 @@ export class RealSnippetOperations implements SnippetOperations {
         const userActiveRules: LintConfigDto[] = await getUserLintingRules();
 
         for (const rule of newRules) {
-            const wasActive = userActiveRules.find(r => r.rules?.id === rule.id);
+            const wasActive = userActiveRules.find(r => r.lintRule?.id === rule.id);
 
-            // Activate
+            // Activate - only if not active before
             if (rule.isActive && !wasActive) {
                 await modifyRule(rule);
             }
-            // Deactivate
+            // Deactivate - only if was active before
             else if (!rule.isActive && wasActive) {
                 await modifyRule({ ...rule, isActive: false });
             }
-            // Update value
+            // Update value - only if active and value changed
             else if (rule.isActive && wasActive && rule.value !== wasActive.ruleValue) {
                 await modifyRule(rule);
             }
+            // If no changes, skip
         }
         return this.getLintingRules();
     }

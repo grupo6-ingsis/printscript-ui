@@ -19,7 +19,7 @@ export type LintRuleDto = {
 export type LintConfigDto = {
     id: string,
     userId: string,
-    rules?: LintRuleDto,
+    lintRule?: LintRuleDto,
     ruleValue?: string,
 }
 

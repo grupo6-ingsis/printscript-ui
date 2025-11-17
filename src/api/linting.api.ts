@@ -11,7 +11,7 @@ export async function getUserLintingRules(): Promise<LintConfigDto[]> {
     return data;
 }
 
-export async function modifyRule(request: Rule): Promise<LintConfigDto> {
+export async function modifyRule(request: Rule): Promise<LintConfigDto | null> {
     // Transform the Rule object to match ActivateRuleRequest expected by backend
     const transformedRequest = {
         id: request.id,
@@ -23,7 +23,13 @@ export async function modifyRule(request: Rule): Promise<LintConfigDto> {
             : null
     };
     
-    const { data } = await apiClient.post(`/lintconfig`, transformedRequest);
-    return data;
+    const response = await apiClient.post(`/lintconfig`, transformedRequest);
+    
+    // Handle 204 No Content response (when deactivating)
+    if (response.status === 204) {
+        return null;
+    }
+    
+    return response.data;
 }
 
