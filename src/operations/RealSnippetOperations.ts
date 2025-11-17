@@ -67,7 +67,7 @@ export class RealSnippetOperations implements SnippetOperations {
         const userActiveRules: LintConfigDto[] = await getUserLintingRules();
 
         return allRules.map(rule => {
-            const activeRule = userActiveRules.find(userRule => userRule.id === rule.id);
+            const activeRule = userActiveRules.find(userRule => userRule.rules?.id === rule.id);
             return {
                 id: rule.id,
                 name: rule.name,
@@ -116,7 +116,7 @@ export class RealSnippetOperations implements SnippetOperations {
         const userActiveRules: LintConfigDto[] = await getUserLintingRules();
 
         for (const rule of newRules) {
-            const wasActive = userActiveRules.find(r => r.id === rule.id);
+            const wasActive = userActiveRules.find(r => r.rules?.id === rule.id);
 
             // Activate
             if (rule.isActive && !wasActive) {

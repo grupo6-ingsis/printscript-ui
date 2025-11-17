@@ -11,8 +11,19 @@ export async function getUserLintingRules(): Promise<LintConfigDto[]> {
     return data;
 }
 
-export async function modifyRule(request : Rule): Promise<LintConfigDto>{
-    const { data } = await apiClient.post(`/lintconfig`, request);
+export async function modifyRule(request: Rule): Promise<LintConfigDto> {
+    // Transform the Rule object to match ActivateRuleRequest expected by backend
+    const transformedRequest = {
+        id: request.id,
+        name: request.name,
+        isActive: request.isActive,
+        hasValue: request.hasValue,
+        ruleValue: request.value !== null && request.value !== undefined 
+            ? String(request.value) 
+            : null
+    };
+    
+    const { data } = await apiClient.post(`/lintconfig`, transformedRequest);
     return data;
 }
 
