@@ -49,3 +49,17 @@ export async function getSnippetById(snippetId: string): Promise<SnippetContentD
     return data;
 }
 
+export async function updateSnippetContent(snippetId: string, content: string): Promise<Snippet> {
+    const {data} = await apiClient.put(`/snippets/${snippetId}`, {content});
+    return {
+        id: data.id,
+        name: data.title,
+        content: data.content,
+        language: "",
+        extension: "",
+        version: data.version,
+        description: data.description,
+        compliance: "pending",
+        author: "",
+    }
+}
