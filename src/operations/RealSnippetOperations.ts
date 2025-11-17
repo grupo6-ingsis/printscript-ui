@@ -6,7 +6,7 @@ import {TestCaseResult} from "../utils/queries";
 import {FileType, LanguageVersionDto} from "../types/FileType";
 import {LintConfigDto, LintRuleDto, Rule} from "../types/Rule";
 import {
-    createSnippetFromEditor,
+    createSnippetFromEditor, deleteSnippetById,
     getSnippetById,
     getSnippetsPaginated,
     updateSnippetContent
@@ -95,7 +95,8 @@ export class RealSnippetOperations implements SnippetOperations {
     }
 
     async deleteSnippet(_id: string): Promise<string> {
-        throw new Error('Not implemented');
+        await deleteSnippetById(_id);
+        return _id;
     }
 
     async testSnippet(_testCase: Partial<TestCase>): Promise<TestCaseResult> {

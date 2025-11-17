@@ -63,3 +63,7 @@ export async function updateSnippetContent(snippetId: string, content: string): 
         author: "",
     }
 }
+
+export async function deleteSnippetById(snippetId: string): Promise<void> {
+    await apiClient.delete(`/snippets/${snippetId}`);
+}
