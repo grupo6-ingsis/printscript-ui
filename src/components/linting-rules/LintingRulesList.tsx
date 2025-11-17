@@ -3,9 +3,14 @@ import {
   Button,
   Card,
   Checkbox,
+  FormControl,
+  InputLabel,
   List,
   ListItem,
-  ListItemText, TextField,
+  ListItemText,
+  MenuItem,
+  Select,
+  TextField,
   Typography
 } from "@mui/material";
 import {useGetLintingRules, useModifyLintingRules} from "../../utils/queries.tsx";
@@ -24,6 +29,10 @@ const LintingRulesList = () => {
     // Initialize rules with default values for hasValue rules
     const initializedRules = data?.map(rule => {
       if (rule.hasValue && (rule.value === null || rule.value === undefined)) {
+        // If rule has options, use the first one as default
+        if (rule.valueOptions && rule.valueOptions.length > 0) {
+          return { ...rule, value: rule.valueOptions[0] };
+        }
         return { ...rule, value: '' };
       }
       return rule;
@@ -53,7 +62,12 @@ const LintingRulesList = () => {
         // If activating a rule that requires a value but doesn't have one, set a default
         let newValue = r.value;
         if (!r.isActive && r.hasValue && (r.value === null || r.value === undefined || r.value === '')) {
-          newValue = '';
+          // If there are options, use the first one
+          if (r.valueOptions && r.valueOptions.length > 0) {
+            newValue = r.valueOptions[0];
+          } else {
+            newValue = '';
+          }
         }
         
         return {...r, isActive: !r.isActive, value: newValue}
@@ -89,7 +103,7 @@ const LintingRulesList = () => {
             <ListItem
               key={rule.name}
               disablePadding
-              style={{height: 40}}
+              style={{minHeight: 40, marginBottom: 8}}
             >
               <Checkbox
                 edge="start"
@@ -99,7 +113,21 @@ const LintingRulesList = () => {
               />
               <ListItemText primary={rule.name} />
                 {rule.hasValue && (
-                    typeof rule.value === 'number' || !isNaN(Number(rule.value)) ? (
+                    rule.valueOptions && rule.valueOptions.length > 0 ? (
+                        <FormControl variant="standard" sx={{ minWidth: 150 }}>
+                          <InputLabel>Format</InputLabel>
+                          <Select
+                            value={rule.value ?? ''}
+                            onChange={(e) => handleValueChange(rule, e.target.value)}
+                            required={rule.isActive}
+                            error={rule.isActive && (rule.value === null || rule.value === undefined || rule.value === '')}
+                          >
+                            {rule.valueOptions.map(option => (
+                              <MenuItem key={option} value={option}>{option}</MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                    ) : typeof rule.value === 'number' || !isNaN(Number(rule.value)) ? (
                         <TextField
                             type="number"
                             variant="standard"

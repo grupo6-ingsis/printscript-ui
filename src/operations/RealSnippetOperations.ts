@@ -74,6 +74,7 @@ export class RealSnippetOperations implements SnippetOperations {
                 isActive: !!activeRule,
                 value: activeRule?.ruleValue ?? null,
                 hasValue: rule.hasValue,
+                valueOptions: rule.valueOptions || [],
             };
         });
     }

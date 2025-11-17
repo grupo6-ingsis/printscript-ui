@@ -5,6 +5,7 @@ export type Rule = {
     isActive: boolean,
     value?: string | number | null,
     hasValue: boolean,
+    valueOptions?: string[],
 }
 
 export type LintRuleDto = {
@@ -12,6 +13,7 @@ export type LintRuleDto = {
     name: string,
     description: string,
     hasValue: boolean,
+    valueOptions: string[],
 };
 
 export type LintConfigDto = {
