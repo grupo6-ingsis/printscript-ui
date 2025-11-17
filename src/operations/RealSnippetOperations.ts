@@ -4,10 +4,11 @@ import {PaginatedUsers} from "../utils/users";
 import {TestCase} from "../types/TestCase";
 import {TestCaseResult} from "../utils/queries";
 import {FileType, LanguageVersionDto} from "../types/FileType";
-import {Rule} from "../types/Rule";
+import {LintConfigDto, LintRuleDto, Rule} from "../types/Rule";
 import {createSnippetFromEditor, getSnippetById, getSnippetsPaginated} from "../api/snippet.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
+import {getLintingRules, getUserLintingRules} from "../api/linting.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -57,8 +58,20 @@ export class RealSnippetOperations implements SnippetOperations {
     }
 
     async getLintingRules(): Promise<Rule[]> {
-        throw new Error('Not implemented');
+        const allRules: LintRuleDto[] = await getLintingRules();
+        const userActiveRules: LintConfigDto[] = await getUserLintingRules();
+
+        return allRules.map(rule => {
+            const activeRule = userActiveRules.find(userRule => userRule.id === rule.id);
+            return {
+                id: rule.id,
+                name: rule.name,
+                isActive: !!activeRule,
+                value: activeRule?.ruleValue ?? null,
+            };
+        });
     }
+
 
     async getTestCases(): Promise<TestCase[]> {
         throw new Error('Not implemented');
