@@ -53,6 +53,7 @@ export type SnippetApiResponse ={
             extension: string;
         };
     };
+    complianceStatus: ComplianceEnum;
 }
 
 export type SnippetContentDto = {
