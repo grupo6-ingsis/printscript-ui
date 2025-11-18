@@ -30,7 +30,6 @@ export async function getSnippetsPaginated(
         ...(filters?.sortBy && { sortBy: filters.sortBy }),
         ...(filters?.direction && { direction: filters.direction }),
     });
-    console.log(params.toString());
     const { data } = await apiClient.get(`/snippets/paginated?${params.toString()}`);
 
 
@@ -42,7 +41,7 @@ export async function getSnippetsPaginated(
         extension: snippet.languageVersion.language.extension,
         version: snippet.languageVersion.version,
         description: snippet.description,
-        compliance: snippet.complianceStatus,
+        compliance: snippet.complianceType,
         author: snippet.ownerId,
     }));
 
@@ -69,7 +68,7 @@ export async function updateSnippetContent(snippetId: string, content: string): 
         extension: "",
         version: data.version,
         description: data.description,
-        compliance: "pending",
+        compliance: "PENDING",
         author: "",
     }
 }

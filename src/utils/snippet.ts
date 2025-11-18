@@ -3,10 +3,10 @@ import {FileType} from "../types/FileType.ts";
 import {AccessType, DirectionType, SortByType} from "../types/FilterTypes.ts";
 
 export type ComplianceEnum =
-    'pending' |
-    'failed' |
-    'not-compliant' |
-    'compliant'
+    'PENDING' |
+    'FAILED' |
+    'NOT_COMPLIANT' |
+    'COMPLIANT'
 
 
 export type CreateSnippet = {
@@ -53,7 +53,7 @@ export type SnippetApiResponse ={
             extension: string;
         };
     };
-    complianceStatus: ComplianceEnum;
+    complianceType: ComplianceEnum;
 }
 
 export type SnippetContentDto = {
