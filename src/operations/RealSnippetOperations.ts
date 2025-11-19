@@ -14,6 +14,7 @@ import {
 import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
 import {getLintingRules, getUserLintingRules, modifyRule} from "../api/linting.api.ts";
+import { searchUsers } from '../api/users.api.ts';
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -51,7 +52,7 @@ export class RealSnippetOperations implements SnippetOperations {
     }
 
     async getUserFriends(_name?: string, _page?: number, _pageSize?: number): Promise<PaginatedUsers> {
-        throw new Error('Not implemented');
+        return await searchUsers(_name || '', _page || 0, _pageSize || 10);
     }
 
     async shareSnippet(_snippetId: string, _userId: string): Promise<Snippet> {
