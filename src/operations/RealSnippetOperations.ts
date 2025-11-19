@@ -40,7 +40,7 @@ export class RealSnippetOperations implements SnippetOperations {
             extension: data.snippet.languageVersion.language.extension,
             version: data.snippet.languageVersion.version,
             description: data.snippet.description,
-            compliance: data.snippet.complianceType,
+            compliance: data.snippet.compliance,
             author: data.snippet.ownerId,
         };
     }

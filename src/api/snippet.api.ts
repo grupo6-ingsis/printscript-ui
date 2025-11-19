@@ -41,7 +41,7 @@ export async function getSnippetsPaginated(
         extension: snippet.languageVersion.language.extension,
         version: snippet.languageVersion.version,
         description: snippet.description,
-        compliance: snippet.complianceType,
+        compliance: snippet.compliance,
         author: snippet.ownerId,
     }));
 
