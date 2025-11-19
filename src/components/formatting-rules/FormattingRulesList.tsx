@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Button,
-  Card,
-  Checkbox,
-  List,
-  ListItem,
-  ListItemText, TextField,
-  Typography
+    Button,
+    Card,
+    Checkbox, FormControl, InputLabel,
+    List,
+    ListItem,
+    ListItemText, MenuItem, Select, TextField,
+    Typography
 } from "@mui/material";
 import {useGetFormatRules, useModifyFormatRules} from "../../utils/queries.tsx";
 import {queryClient} from "../../App.tsx";
@@ -72,7 +72,27 @@ const FormattingRulesList = () => {
                 onChange={toggleRule(rule)}
               />
               <ListItemText primary={rule.name} />
-              {typeof rule.value === 'number' ?
+
+                // Inside your map for rules:
+                {rule.valueOptions && rule.valueOptions.length > 0 ? (
+                        <FormControl variant="standard" sx={{ minWidth: 150 }}>
+                            <InputLabel>Format</InputLabel>
+                            <Select
+                                value={rule.value !== undefined && rule.value !== null ? String(rule.value) : ''}
+                                onChange={e => {
+                                    const val = e.target.value;
+                                    if (rule.valueOptions && rule.valueOptions.length > 0) {
+                                        const option = rule.valueOptions.find(opt => String(opt) === val);
+                                        handleValueChange(rule, typeof option === 'number' ? Number(val) : val);
+                                    }
+                                }}
+                            >
+                                {rule.valueOptions.map(option => (
+                                    <MenuItem key={option} value={String(option)}>{option}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>) :
+              typeof rule.value === 'number' ?
                 (<TextField
                   type="number"
                   variant={"standard"}

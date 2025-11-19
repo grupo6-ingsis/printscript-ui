@@ -59,7 +59,7 @@ const LintingRulesList = () => {
   const toggleRule = (rule: Rule) => () => {
     const newRules = rules?.map(r => {
       if (r.name === rule.name) {
-        let newValue: string | null | undefined = r.value;
+        let newValue: string | null | undefined | number = r.value;
         if (!r.isActive && r.hasValue && (r.value === null || r.value === undefined || r.value === '')) {
           if (r.valueOptions && r.valueOptions.length > 0) {
             newValue = r.valueOptions[0];
@@ -114,17 +114,24 @@ const LintingRulesList = () => {
                 {rule.hasValue && (
                     rule.valueOptions && rule.valueOptions.length > 0 ? (
                         <FormControl variant="standard" sx={{ minWidth: 150 }}>
-                          <InputLabel>Format</InputLabel>
-                          <Select
-                            value={rule.value ?? ''}
-                            onChange={(e) => handleValueChange(rule, e.target.value)}
-                            required={rule.isActive}
-                            error={rule.isActive && (rule.value === null || rule.value === undefined || rule.value === '')}
-                          >
-                            {rule.valueOptions.map(option => (
-                              <MenuItem key={option} value={option}>{option}</MenuItem>
-                            ))}
-                          </Select>
+                            <InputLabel>Linting</InputLabel>
+                            <Select
+                                value={rule.value !== undefined && rule.value !== null ? String(rule.value) : ''}
+                                onChange={e => {
+                                    const val = e.target.value;
+                                    // Convert to number if the original option was a number
+                                    if (rule.valueOptions && rule.valueOptions.length > 0) {
+                                        const option = rule.valueOptions.find(opt => String(opt) === val);
+                                        handleValueChange(rule, typeof option === 'number' ? Number(val) : val);
+                                    }
+                                }}
+                                required={rule.isActive}
+                                error={rule.isActive && (rule.value === null || rule.value === undefined || rule.value === '')}
+                            >
+                                {rule.valueOptions.map(option => (
+                                    <MenuItem key={option} value={String(option)}>{option}</MenuItem>
+                                ))}
+                            </Select>
                         </FormControl>
                     ) : typeof rule.value === 'number' || !isNaN(Number(rule.value)) ? (
                         <TextField
