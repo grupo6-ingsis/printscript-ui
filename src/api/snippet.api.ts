@@ -1,4 +1,11 @@
-import {CreateSnippet, Snippet, SnippetApiResponse, SnippetContentDto, SnippetFilters} from "../utils/snippet.ts";
+import {
+    ComplianceEnum,
+    CreateSnippet, ShareSnippetResponseDto,
+    Snippet,
+    SnippetApiResponse,
+    SnippetContentDto,
+    SnippetFilters
+} from "../utils/snippet.ts";
 import apiClient from "./apiClient.ts";
 
 export async function createSnippetFromEditor(input: CreateSnippet): Promise<Snippet> {
@@ -75,4 +82,23 @@ export async function updateSnippetContent(snippetId: string, content: string): 
 
 export async function deleteSnippetById(snippetId: string): Promise<void> {
     await apiClient.delete(`/snippets/${snippetId}`);
+}
+
+export async function shareSnippetWithUser(snippetId: string, userId: string): Promise<Snippet> {
+    const { data } = await apiClient.patch(`snippets/share/${snippetId}/${userId}`);
+    return mapShareSnippetResponseToSnippet(data)
+}
+
+export function mapShareSnippetResponseToSnippet(response: ShareSnippetResponseDto): Snippet {
+    return {
+        id: response.snippetId,
+        name: "",
+        content: "",
+        language: "",
+        extension: "",
+        version: "",
+        description: "",
+        compliance: "PENDING" as ComplianceEnum,
+        author: response.userId,
+    }
 }
