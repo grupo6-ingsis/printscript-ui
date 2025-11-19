@@ -65,7 +65,7 @@ const FormattingRulesList = () => {
 
     return (
         <Card style={{padding: 16, margin: 16}}>
-            <Typography variant={"h6"}>Linting rules</Typography>
+            <Typography variant={"h6"}>Formatting rules</Typography>
             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 {
                     isLoading || isLoadingMutate ?  <Typography style={{height: 80}}>Loading...</Typography> :

@@ -13,9 +13,9 @@ import {
 } from "../api/snippet.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
-import {getLintingRules, getUserLintingRules, modifyRule} from "../api/linting.api.ts";
+import {getLintingRules, getUserLintingRules, modifyLintRule} from "../api/linting.api.ts";
 import { searchUsers } from '../api/users.api.ts';
-import {getFormattingRules, getUserFormattingRules} from "../api/formatting.api.ts";
+import {getFormattingRules, getUserFormattingRules, modifyFormattingRule} from "../api/formatting.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -133,15 +133,15 @@ export class RealSnippetOperations implements SnippetOperations {
 
             // Activate - only if not active before
             if (rule.isActive && !wasActive) {
-                await modifyRule(rule);
+                await modifyFormattingRule(rule);
             }
             // Deactivate - only if was active before
             else if (!rule.isActive && wasActive) {
-                await modifyRule({ ...rule, isActive: false });
+                await modifyFormattingRule({ ...rule, isActive: false });
             }
             // Update value - only if active and value changed
             else if (rule.isActive && wasActive && rule.value !== wasActive.ruleValue) {
-                await modifyRule(rule);
+                await modifyFormattingRule(rule);
             }
             // If no changes, skip
         }
@@ -157,15 +157,15 @@ export class RealSnippetOperations implements SnippetOperations {
 
             // Activate - only if not active before
             if (rule.isActive && !wasActive) {
-                await modifyRule(rule);
+                await modifyLintRule(rule);
             }
             // Deactivate - only if was active before
             else if (!rule.isActive && wasActive) {
-                await modifyRule({ ...rule, isActive: false });
+                await modifyLintRule({ ...rule, isActive: false });
             }
             // Update value - only if active and value changed
             else if (rule.isActive && wasActive && rule.value !== wasActive.ruleValue) {
-                await modifyRule(rule);
+                await modifyLintRule(rule);
             }
             // If no changes, skip
         }

@@ -11,7 +11,7 @@ export async function getUserLintingRules(): Promise<LintConfigDto[]> {
     return data;
 }
 
-export async function modifyRule(request: Rule): Promise<LintConfigDto | null> {
+export async function modifyLintRule(request: Rule): Promise<LintConfigDto | null> {
     // Transform the Rule object to match ActivateRuleRequest expected by backend
     const transformedRequest = {
         id: request.id,
