@@ -86,7 +86,7 @@ const FormattingRulesList = () => {
                                     {rule.hasValue && (
                                         rule.valueOptions && rule.valueOptions.length > 0 ? (
                                             <FormControl variant="standard" sx={{ minWidth: 150 }}>
-                                                <InputLabel>Format</InputLabel>
+                                                    <InputLabel>Quantity</InputLabel>
                                                 <Select
                                                     value={rule.value ?? ''}
                                                     onChange={(e) => handleValueChange(rule, e.target.value)}
