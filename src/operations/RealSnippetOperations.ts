@@ -4,7 +4,7 @@ import {PaginatedUsers} from "../utils/users";
 import {TestCase} from "../types/TestCase";
 import {TestCaseResult} from "../utils/queries";
 import {FileType, LanguageVersionDto} from "../types/FileType";
-import {LintConfigDto, LintRuleDto, Rule} from "../types/Rule";
+import {FormatConfigDto, FormatRuleDto, LintConfigDto, LintRuleDto, Rule} from "../types/Rule";
 import {
     createSnippetFromEditor, deleteSnippetById,
     getSnippetById,
@@ -15,6 +15,7 @@ import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
 import {getLintingRules, getUserLintingRules, modifyRule} from "../api/linting.api.ts";
 import { searchUsers } from '../api/users.api.ts';
+import {getFormattingRules, getUserFormattingRules} from "../api/formatting.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -60,7 +61,20 @@ export class RealSnippetOperations implements SnippetOperations {
     }
 
     async getFormatRules(): Promise<Rule[]> {
-        throw new Error('Not implemented');
+        const allRules: FormatRuleDto[] = await getFormattingRules();
+        const userActiveRules: FormatConfigDto[] = await getUserFormattingRules();
+
+        return allRules.map(rule => {
+            const activeRule = userActiveRules.find(userRule => userRule.formatRule?.id === rule.id);
+            return {
+                id: rule.id,
+                name: rule.name,
+                isActive: !!activeRule,
+                value: activeRule?.ruleValue ?? null,
+                hasValue: rule.hasValue,
+                valueOptions: rule.valueOptions || [],
+            };
+        });
     }
 
     async getLintingRules(): Promise<Rule[]> {
@@ -110,8 +124,27 @@ export class RealSnippetOperations implements SnippetOperations {
         return await getSupportedLanguages();
     }
 
-    async modifyFormatRule(_newRules: Rule[]): Promise<Rule[]> {
-        throw new Error('Not implemented');
+    async modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
+        const userActiveRules: FormatConfigDto[] = await getUserFormattingRules();
+        for (const rule of newRules) {
+            const wasActive = userActiveRules.find(r => r.formatRule?.id === rule.id);
+
+            // Activate - only if not active before
+            if (rule.isActive && !wasActive) {
+                await modifyRule(rule);
+            }
+            // Deactivate - only if was active before
+            else if (!rule.isActive && wasActive) {
+                await modifyRule({ ...rule, isActive: false });
+            }
+            // Update value - only if active and value changed
+            else if (rule.isActive && wasActive && rule.value !== wasActive.ruleValue) {
+                await modifyRule(rule);
+            }
+            // If no changes, skip
+        }
+        return this.getFormatRules();
+
     }
 
     async modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
