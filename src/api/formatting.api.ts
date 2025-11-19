@@ -19,7 +19,7 @@ export async function modifyFormattingRule(request: Rule): Promise<FormatConfigD
         isActive: request.isActive,
         hasValue: request.hasValue,
         ruleValue: request.value !== null && request.value !== undefined
-            ? Number(request.value)
+            ? String(request.value)
             : null
     };
 

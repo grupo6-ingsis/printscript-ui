@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Button,
-  Card,
-  Checkbox,
-  List,
-  ListItem,
-  ListItemText, TextField,
-  Typography
+    Button,
+    Card,
+    Checkbox, FormControl, InputLabel,
+    List,
+    ListItem,
+    ListItemText, MenuItem, Select, TextField,
+    Typography
 } from "@mui/material";
 import {useGetFormatRules, useModifyFormatRules} from "../../utils/queries.tsx";
 import {queryClient} from "../../App.tsx";
@@ -52,42 +52,64 @@ const FormattingRulesList = () => {
     setRules(newRules)
   }
 
-  return (
-    <Card style={{padding: 16, margin: 16}}>
-      <Typography variant={"h6"}>Formatting rules</Typography>
-      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-        {
-          isLoading || isLoadingMutate ?  <Typography style={{height: 80}}>Loading...</Typography> :
-          rules?.map((rule) => {
-          return (
-            <ListItem
-              key={rule.name}
-              disablePadding
-              style={{height: 40}}
-            >
-              <Checkbox
-                edge="start"
-                checked={rule.isActive}
-                disableRipple
-                onChange={toggleRule(rule)}
-              />
-              <ListItemText primary={rule.name} />
-              {typeof rule.value === 'number' ?
-                (<TextField
-                  type="number"
-                  variant={"standard"}
-                  value={rule.value}
-                  onChange={handleNumberChange(rule)}
-                />) : typeof rule.value === 'string' ?
-                  (<TextField
-                    variant={"standard"}
-                    value={rule.value}
-                    onChange={e => handleValueChange(rule, e.target.value)}
-                  />) : null
-              }
-            </ListItem>
-          )
-        })}
+    return (
+        <Card style={{padding: 16, margin: 16}}>
+            <Typography variant={"h6"}>Linting rules</Typography>
+            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                {
+                    isLoading || isLoadingMutate ?  <Typography style={{height: 80}}>Loading...</Typography> :
+                        rules?.map((rule) => {
+                            return (
+                                <ListItem
+                                    key={rule.name}
+                                    disablePadding
+                                    style={{minHeight: 40, marginBottom: 8}}
+                                >
+                                    <Checkbox
+                                        edge="start"
+                                        checked={rule.isActive}
+                                        disableRipple
+                                        onChange={toggleRule(rule)}
+                                    />
+                                    <ListItemText primary={rule.name} />
+                                    {rule.hasValue && (
+                                        rule.valueOptions && rule.valueOptions.length > 0 ? (
+                                            <FormControl variant="standard" sx={{ minWidth: 150 }}>
+                                                <InputLabel>Format</InputLabel>
+                                                <Select
+                                                    value={rule.value ?? ''}
+                                                    onChange={(e) => handleValueChange(rule, e.target.value)}
+                                                    required={rule.isActive}
+                                                    error={rule.isActive && (rule.value === null || rule.value === undefined || rule.value === '')}
+                                                >
+                                                    {rule.valueOptions.map(option => (
+                                                        <MenuItem key={option} value={option}>{option}</MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        ) : !isNaN(Number(rule.value)) ? (
+                                            <TextField
+                                                type="number"
+                                                variant="standard"
+                                                value={rule.value ?? ''}
+                                                onChange={handleNumberChange(rule)}
+                                                required={rule.isActive}
+                                                error={rule.isActive && (rule.value === null || rule.value === undefined || rule.value === '')}
+                                            />
+                                        ) : (
+                                            <TextField
+                                                variant="standard"
+                                                value={rule.value ?? ''}
+                                                onChange={e => handleValueChange(rule, e.target.value)}
+                                                required={rule.isActive}
+                                                error={rule.isActive && (rule.value === null || rule.value === undefined || rule.value === '')}
+                                            />
+                                        )
+                                    )}
+
+                                </ListItem>
+                            )
+                        })}
       </List>
       <Button disabled={isLoading} variant={"contained"} onClick={() => mutateAsync(rules ?? [])}>Save</Button>
     </Card>

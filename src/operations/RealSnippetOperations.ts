@@ -59,7 +59,6 @@ export class RealSnippetOperations implements SnippetOperations {
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
         return await shareSnippetWithUser(snippetId, userId);
     }
-
     async getFormatRules(): Promise<Rule[]> {
         const allRules: FormatRuleDto[] = await getFormattingRules();
         const userActiveRules: FormatConfigDto[] = await getUserFormattingRules();
@@ -70,12 +69,15 @@ export class RealSnippetOperations implements SnippetOperations {
                 id: rule.id,
                 name: rule.name,
                 isActive: !!activeRule,
-                value: activeRule?.ruleValue ?? null,
+                value: activeRule?.ruleValue !== undefined && activeRule?.ruleValue !== null
+                    ? String(activeRule.ruleValue)
+                    : null,
                 hasValue: rule.hasValue,
-                valueOptions: rule.valueOptions || [],
+                valueOptions: rule.valueOptions ? rule.valueOptions.map(opt => String(opt)) : [],
             };
         });
     }
+
 
     async getLintingRules(): Promise<Rule[]> {
         const allRules: LintRuleDto[] = await getLintingRules();
