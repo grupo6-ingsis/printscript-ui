@@ -3,9 +3,9 @@ export type Rule = {
     id: string,
     name: string,
     isActive: boolean,
-    value?: string | null,
+    value?: string | number | null ,
     hasValue: boolean,
-    valueOptions?: string[],
+    valueOptions?: string[] | number[],
 }
 
 export type LintRuleDto = {
@@ -23,3 +23,17 @@ export type LintConfigDto = {
     ruleValue?: string,
 }
 
+export type FormatRuleDto = {
+    id: string,
+    name: string,
+    description: string,
+    hasValue: boolean,
+    valueOptions: number[],
+}
+
+export type FormatConfigDto = {
+    id: string,
+    userId: string,
+    formatRule?: FormatRuleDto,
+    ruleValue?: number,
+}
