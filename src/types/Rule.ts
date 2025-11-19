@@ -23,3 +23,17 @@ export type LintConfigDto = {
     ruleValue?: string,
 }
 
+export type FormatRuleDto = {
+    id: string,
+    name: string,
+    description: string,
+    hasValue: boolean,
+    valueOptions: number[],
+}
+
+export type FormatConfigDto = {
+    id: string,
+    userId: string,
+    formatRule?: FormatRuleDto,
+    ruleValue?: number,
+}
