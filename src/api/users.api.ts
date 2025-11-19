@@ -10,7 +10,7 @@ export const searchUsers = async (
     try {
         const params = {
             query: query,
-            page: page.toString(),
+            page: Math.max(page - 1, 0).toString(),
             perPage: Math.min(pageSize, 10).toString(), // 10 porque es lo que pusimos en el backend
         };
 
