@@ -20,9 +20,20 @@ const FormattingRulesList = () => {
     onSuccess: () => queryClient.invalidateQueries('formatRules')
   })
 
-  useEffect(() => {
-    setRules(data)
-  }, [data]);
+    useEffect(() => {
+        // Initialize rules with default values for hasValue rules
+        const initializedRules = data?.map(rule => {
+            if (rule.hasValue && (rule.value === null || rule.value === undefined)) {
+                // If rule has options, use the first one as default
+                if (rule.valueOptions && rule.valueOptions.length > 0) {
+                    return { ...rule, value: rule.valueOptions[0] };
+                }
+                return { ...rule, value: '' };
+            }
+            return rule;
+        });
+        setRules(initializedRules);
+    }, [data]);
 
   const handleValueChange = (rule: Rule, newValue: string | number) => {
     const newRules = rules?.map(r => {
