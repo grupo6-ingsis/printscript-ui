@@ -68,3 +68,8 @@ export type SnippetFilters = {
     sortBy?: SortByType;
     direction?: DirectionType;
 }
+export type ShareSnippetResponseDto = {
+     sharedUserId: string,
+     snippetId: string,
+     userId: string,
+}

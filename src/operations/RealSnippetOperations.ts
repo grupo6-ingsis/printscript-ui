@@ -8,7 +8,7 @@ import {LintConfigDto, LintRuleDto, Rule} from "../types/Rule";
 import {
     createSnippetFromEditor, deleteSnippetById,
     getSnippetById,
-    getSnippetsPaginated,
+    getSnippetsPaginated, shareSnippetWithUser,
     updateSnippetContent
 } from "../api/snippet.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
@@ -47,16 +47,16 @@ export class RealSnippetOperations implements SnippetOperations {
     }
 
 
-    async updateSnippetById(_id: string, _updateSnippet: UpdateSnippet): Promise<Snippet> {
-        return await updateSnippetContent(_id, _updateSnippet.content)
+    async updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
+        return await updateSnippetContent(id, updateSnippet.content)
     }
 
     async getUserFriends(_name?: string, _page?: number, _pageSize?: number): Promise<PaginatedUsers> {
         return await searchUsers(_name || '', _page || 0, _pageSize || 10);
     }
 
-    async shareSnippet(_snippetId: string, _userId: string): Promise<Snippet> {
-        throw new Error('Not implemented');
+    async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
+        return await shareSnippetWithUser(snippetId, userId);
     }
 
     async getFormatRules(): Promise<Rule[]> {
