@@ -111,7 +111,7 @@ export class RealSnippetOperations implements SnippetOperations {
             id: testCase.id ?? "",
             name: testCase.name ?? "",
             input: testCase.input,
-            output: testCase.output,
+            expectedOutput: testCase.output,
             snippetId: testCase.snippetId ?? "",
         };
         return await createTestCase(request);
