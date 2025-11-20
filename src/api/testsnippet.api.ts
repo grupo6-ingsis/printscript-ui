@@ -1,5 +1,6 @@
 import apiClient from "./apiClient.ts";
 import {CreateTestSnippetRequest, TestCase} from "../types/TestCase.ts";
+import {TestCaseResult} from "../utils/queries.tsx";
 
 export async function createTestCase(request: CreateTestSnippetRequest): Promise<TestCase> {
     const { data } = await apiClient.post(`/testsnippet`, request);
@@ -21,3 +22,9 @@ export async function getTestCases(snippetId: string): Promise<TestCase[]> {
     const { data } = await apiClient.get(`/testsnippet`, { params: { snippetId } });
     return data;
 }
+
+export async function runTestSnippet(test: Partial<TestCase>): Promise<TestCaseResult> {
+    const { data } = await apiClient.post(`/testsnippet/run`, test);
+    return data;
+}
+

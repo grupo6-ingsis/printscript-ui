@@ -16,7 +16,7 @@ import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/langua
 import {getLintingRules, getUserLintingRules, modifyLintRule} from "../api/linting.api.ts";
 import { searchUsers } from '../api/users.api.ts';
 import {getFormattingRules, getUserFormattingRules, modifyFormattingRule} from "../api/formatting.api.ts";
-import {createTestCase, deleteTestCase, getTestCases} from "../api/testsnippet.api.ts";
+import {createTestCase, deleteTestCase, getTestCases, runTestSnippet} from "../api/testsnippet.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -127,8 +127,8 @@ export class RealSnippetOperations implements SnippetOperations {
         return _id;
     }
 
-    async testSnippet(_testCase: Partial<TestCase>): Promise<TestCaseResult> {
-        throw new Error('Not implemented');
+    async testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
+        return await runTestSnippet(testCase)
     }
 
     async getFileTypes(): Promise<FileType[]> {
