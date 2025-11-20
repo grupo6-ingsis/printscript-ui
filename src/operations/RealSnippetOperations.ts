@@ -128,7 +128,14 @@ export class RealSnippetOperations implements SnippetOperations {
     }
 
     async testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
-        return await runTestSnippet(testCase)
+        const request: CreateTestSnippetRequest = {
+            id: testCase.id ?? "",
+            name: testCase.name ?? "",
+            input: testCase.input,
+            expectedOutput: testCase.output,
+            snippetId: testCase.snippetId ?? "",
+        };
+        return await runTestSnippet(request)
     }
 
     async getFileTypes(): Promise<FileType[]> {
