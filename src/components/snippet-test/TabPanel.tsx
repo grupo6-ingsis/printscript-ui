@@ -96,7 +96,7 @@ export const TabPanel = ({value, index, test: initialTest, setTestCase, removeTe
                         >
                             Test
                         </Button>
-                        {data && (data === "success" ? <Chip label="Pass" color="success"/> :
+                        {data && (data === "SUCCESS" ? <Chip label="Pass" color="success"/> :
                             <Chip label="Fail" color="error"/>)}
                     </Box>
                 </Box>
