@@ -18,6 +18,6 @@ export async function deleteTestCase(id: string): Promise<string> {
 }
 
 export async function getTestCases(snippetId: string): Promise<TestCase[]> {
-    const { data } = await apiClient.post(`/testsnippet/snippetId`, snippetId);
+    const { data } = await apiClient.get(`/testsnippet`, { params: { snippetId } });
     return data;
 }
