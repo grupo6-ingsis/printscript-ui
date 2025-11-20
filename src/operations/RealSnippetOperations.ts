@@ -1,7 +1,7 @@
 import {SnippetFilters, SnippetOperations} from '../utils/snippetOperations'
 import {CreateSnippet, PaginatedSnippets, Snippet, SnippetContentDto, UpdateSnippet} from '../utils/snippet'
 import {PaginatedUsers} from "../utils/users";
-import {TestCase} from "../types/TestCase";
+import {CreateTestSnippetRequest, TestCase} from "../types/TestCase";
 import {TestCaseResult} from "../utils/queries";
 import {FileType, LanguageVersionDto} from "../types/FileType";
 import {FormatConfigDto, FormatRuleDto, LintConfigDto, LintRuleDto, Rule} from "../types/Rule";
@@ -16,6 +16,7 @@ import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/langua
 import {getLintingRules, getUserLintingRules, modifyLintRule} from "../api/linting.api.ts";
 import { searchUsers } from '../api/users.api.ts';
 import {getFormattingRules, getUserFormattingRules, modifyFormattingRule} from "../api/formatting.api.ts";
+import {createTestCase, deleteTestCase, getTestCases} from "../api/testsnippet.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -97,20 +98,28 @@ export class RealSnippetOperations implements SnippetOperations {
     }
 
 
-    async getTestCases(): Promise<TestCase[]> {
-        throw new Error('Not implemented');
+    async getTestCases(snippetId: string): Promise<TestCase[]> {
+        return await getTestCases(snippetId)
     }
 
     async formatSnippet(_snippet: string): Promise<string> {
         throw new Error('Not implemented');
     }
 
-    async postTestCase(_testCase: Partial<TestCase>): Promise<TestCase> {
-        throw new Error('Not implemented');
+    async postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {
+        const request: CreateTestSnippetRequest = {
+            id: testCase.id ?? "",
+            name: testCase.name ?? "",
+            input: testCase.input,
+            output: testCase.output,
+            snippetId: testCase.snippetId ?? "",
+        };
+        return await createTestCase(request);
     }
 
-    async removeTestCase(_id: string): Promise<string> {
-        throw new Error('Not implemented');
+
+    async removeTestCase(id: string): Promise<string> {
+        return await deleteTestCase(id);
     }
 
     async deleteSnippet(_id: string): Promise<string> {

@@ -70,21 +70,6 @@ const paginatedUsers: PaginatedUsers = {
   ]
 }
 
-const fakeTestCases: TestCase[] = [
-  {
-    id: uuid(),
-    name: "Test Case 1",
-    input: ["A", "B"],
-    output: ["C", "D"]
-  },
-  {
-    id: uuid(),
-    name: "Test Case 2",
-    input: ["E", "F"],
-    output: ["G", "H"]
-  },
-]
-
 export class FakeSnippetStore {
   private readonly snippetMap: Map<string, Snippet> = new Map()
   private readonly testCaseMap: Map<string, TestCase> = new Map()
@@ -94,10 +79,6 @@ export class FakeSnippetStore {
   constructor() {
     INITIAL_SNIPPETS.forEach(snippet => {
       this.snippetMap.set(snippet.id, snippet)
-    })
-
-    fakeTestCases.forEach(testCase => {
-      this.testCaseMap.set(testCase.id, testCase)
     })
   }
 
