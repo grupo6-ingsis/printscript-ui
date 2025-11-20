@@ -7,7 +7,7 @@ export async function createTestCase(request: CreateTestSnippetRequest): Promise
         id: data.id,
         name: data.name,
         input: data.input,
-        output: data.output,
+        output: data.expectedOutput,
         snippetId: data.snippetId,
     }
 }

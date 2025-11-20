@@ -10,6 +10,6 @@ export type CreateTestSnippetRequest = {
     id: string;
     name: string;
     input?: string[];
-    output?: string[];
+    expectedOutput?: string[];
     snippetId: string;
 };
