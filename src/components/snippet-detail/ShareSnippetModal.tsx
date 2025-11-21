@@ -35,7 +35,7 @@ export const ShareSnippetModal = (props: ShareSnippetModalProps) => {
               getOptionLabel={(option) => option.name}
               loading={isLoading}
               value={selectedUser}
-              onInputChange={(_: unknown, newValue: string | null) => newValue && setName(newValue)}
+              onInputChange={(_: unknown, newValue: string | null) => setName(newValue ?? "")}
               onChange={(_: unknown, newValue: User | null) => handleSelectUser(newValue)}
               clearOnEscape
           />
