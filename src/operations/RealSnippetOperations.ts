@@ -15,7 +15,12 @@ import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
 import {getLintingRules, getUserLintingRules, modifyLintRule} from "../api/linting.api.ts";
 import { searchUsers } from '../api/users.api.ts';
-import {getFormattingRules, getUserFormattingRules, modifyFormattingRule} from "../api/formatting.api.ts";
+import {
+    formatSingleSnippet,
+    getFormattingRules,
+    getUserFormattingRules,
+    modifyFormattingRule
+} from "../api/formatting.api.ts";
 import {createTestCase, deleteTestCase, getTestCases, runTestSnippet} from "../api/testsnippet.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
@@ -102,8 +107,8 @@ export class RealSnippetOperations implements SnippetOperations {
         return await getTestCases(snippetId)
     }
 
-    async formatSnippet(_snippet: string): Promise<string> {
-        throw new Error('Not implemented');
+    async formatSnippet(snippet: string): Promise<string> {
+        return await formatSingleSnippet(snippet)
     }
 
     async postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {

@@ -32,3 +32,8 @@ export async function modifyFormattingRule(request: Rule): Promise<FormatConfigD
 
     return response.data;
 }
+
+export async function formatSingleSnippet(snippetId: string): Promise<string> {
+    const { data } = await apiClient.post(`/format/snippet/${snippetId}`);
+    return data;
+}
