@@ -1,7 +1,7 @@
 import {Autocomplete, Box, Button, Divider, TextField, Typography} from "@mui/material";
 import {ModalWrapper} from "../common/ModalWrapper.tsx";
 import {useGetUsers} from "../../utils/queries.tsx";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {User} from "../../utils/users.ts";
 
 type ShareSnippetModalProps = {
@@ -14,16 +14,8 @@ type ShareSnippetModalProps = {
 export const ShareSnippetModal = (props: ShareSnippetModalProps) => {
   const {open, onClose, onShare, loading, snippetId} = props
   const [name, setName] = useState("")
-  const [debouncedName, setDebouncedName] = useState("")
-  const {data, isLoading} = useGetUsers(debouncedName, 1, 5, snippetId)
+  const {data, isLoading} = useGetUsers(name, 0, 5, snippetId)
   const [selectedUser, setSelectedUser] = useState<User | undefined>()
-
-  useEffect(() => {
-    const getData = setTimeout(() => {
-      setDebouncedName(name)
-    }, 3000)
-    return () => clearTimeout(getData)
-  }, [name])
 
   function handleSelectUser(newValue: User | null) {
     newValue && setSelectedUser(newValue)
@@ -45,6 +37,7 @@ export const ShareSnippetModal = (props: ShareSnippetModalProps) => {
               value={selectedUser}
               onInputChange={(_: unknown, newValue: string | null) => newValue && setName(newValue)}
               onChange={(_: unknown, newValue: User | null) => handleSelectUser(newValue)}
+              clearOnEscape
           />
           <Box mt={4} display={"flex"} width={"100%"} justifyContent={"flex-end"}>
             <Button onClick={onClose} variant={"outlined"}>Cancel</Button>
