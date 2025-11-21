@@ -25,6 +25,6 @@ export async function getTestCases(snippetId: string): Promise<TestCase[]> {
 
 export async function runTestSnippet(test: CreateTestSnippetRequest): Promise<TestCaseResult> {
     const { data } = await apiClient.post(`/testsnippet/run`, test);
-    return data.resultType;
+    return data;
 }
 

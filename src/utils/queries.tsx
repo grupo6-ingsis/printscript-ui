@@ -104,7 +104,7 @@ export const useRemoveTestCase = ({onSuccess}: {onSuccess: () => void}) => {
   );
 };
 
-export type TestCaseResult = "SUCCESS" | "FAIL"
+export type TestCaseResult = "SUCCESS" | "FAILURE"
 
 export const useTestSnippet = () => {
   const snippetOperations = useSnippetsOperations()

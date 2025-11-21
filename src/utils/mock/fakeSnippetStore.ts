@@ -161,7 +161,7 @@ export class FakeSnippetStore {
   }
 
   testSnippet(): TestCaseResult {
-    return Math.random() > 0.5 ? "SUCCESS" : "FAIL"
+    return Math.random() > 0.5 ? "SUCCESS" : "FAILURE"
   }
   modifyFormattingRule(newRules: Rule[]): Rule[] {
     this.formattingRules = newRules;
