@@ -7,6 +7,7 @@ import {
     SnippetFilters
 } from "../utils/snippet.ts";
 import apiClient from "./apiClient.ts";
+import {getUsersByIds} from "./users.api.ts";
 
 export async function createSnippetFromEditor(input: CreateSnippet): Promise<Snippet> {
     const transformedInput = {
@@ -39,6 +40,9 @@ export async function getSnippetsPaginated(
     });
     const { data } = await apiClient.get(`/snippets/paginated?${params.toString()}`);
 
+    // Batch fetch users names
+    const userIds = data.content.map((snippet: SnippetApiResponse) => snippet.ownerId);
+    const userNamesMap = await getUsersByIds(userIds);
 
     const snippets: Snippet[] = data.content.map((snippet: SnippetApiResponse) => ({
         id: snippet.id,
@@ -49,7 +53,7 @@ export async function getSnippetsPaginated(
         version: snippet.languageVersion.version,
         description: snippet.description,
         compliance: snippet.compliance,
-        author: snippet.ownerId,
+        author: userNamesMap.get(snippet.ownerId) || snippet.ownerId
     }));
 
     return {
