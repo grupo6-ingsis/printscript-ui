@@ -74,9 +74,9 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
 
   useEffect(() => {
     if (formatSnippetData) {
-      setCode(formatSnippetData)
+      queryClient.invalidateQueries(['snippet', id]);
     }
-  }, [formatSnippetData])
+  }, [formatSnippetData, id])
 
 
   async function handleShareSnippet(userId: string) {
