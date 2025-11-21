@@ -107,8 +107,8 @@ export class RealSnippetOperations implements SnippetOperations {
         return await getTestCases(snippetId)
     }
 
-    async formatSnippet(snippet: string): Promise<string> {
-        return await formatSingleSnippet(snippet)
+    async formatSnippet({ snippetId, content }: { snippetId: string, content: string }): Promise<string> {
+        return await formatSingleSnippet(snippetId, content);
     }
 
     async postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {
