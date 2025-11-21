@@ -4,7 +4,14 @@ import {PaginatedUsers} from "../utils/users";
 import {CreateTestSnippetRequest, TestCase} from "../types/TestCase";
 import {TestCaseResult} from "../utils/queries";
 import {FileType, LanguageVersionDto} from "../types/FileType";
-import {FormatConfigDto, FormatRuleDto, LintConfigDto, LintRuleDto, Rule} from "../types/Rule";
+import {
+    FormatConfigDto,
+    FormatRuleDto,
+    FormatSingleSnippetRequest,
+    LintConfigDto,
+    LintRuleDto,
+    Rule
+} from "../types/Rule";
 import {
     createSnippetFromEditor, deleteSnippetById,
     getSnippetById,
@@ -108,7 +115,11 @@ export class RealSnippetOperations implements SnippetOperations {
     }
 
     async formatSnippet({ snippetId, content }: { snippetId: string, content: string }): Promise<string> {
-        return await formatSingleSnippet(snippetId, content);
+        const input: FormatSingleSnippetRequest = {
+            content,
+            snippetId,
+        };
+        return await formatSingleSnippet(input);
     }
 
     async postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {

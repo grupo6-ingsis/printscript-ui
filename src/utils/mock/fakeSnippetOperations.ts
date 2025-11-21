@@ -74,11 +74,15 @@ export class FakeSnippetOperations implements SnippetOperations {
     })
   }
 
-  formatSnippet(snippetContent: string): Promise<string> {
+  // Elimina cualquier método residual o sobrecarga antigua:
+  // formatSnippet(snippet: string): Promise<string> { ... } // <-- NO DEBE EXISTIR
+  // Solo debe existir:
+  async formatSnippet(params: { snippetId: string; content: string }): Promise<string> {
     return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.formatSnippet(snippetContent)), DELAY)
+      setTimeout(() => resolve(this.fakeStore.formatSnippet(params.content)), DELAY)
     })
   }
+
 
   getTestCases(): Promise<TestCase[]> {
     return new Promise(resolve => {

@@ -133,7 +133,7 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
               </Tooltip>
             </Box>
             <Box display={"flex"} gap={2}>
-              <Box flex={1} height={"fit-content"} overflow={"none"} minHeight={"500px"} bgcolor={'black'} color={'white'} code={code}>
+              <Box flex={1} height={"fit-content"} overflow={"none"} minHeight={"500px"} bgcolor={'black'} color={'white'}>
                 <Editor
                     value={code}
                     padding={10}
