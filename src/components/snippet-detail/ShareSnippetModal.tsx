@@ -9,12 +9,13 @@ type ShareSnippetModalProps = {
   onClose: () => void
   onShare: (userId: string) => void
   loading: boolean
+  snippetId: string
 }
 export const ShareSnippetModal = (props: ShareSnippetModalProps) => {
-  const {open, onClose, onShare, loading} = props
+  const {open, onClose, onShare, loading, snippetId} = props
   const [name, setName] = useState("")
   const [debouncedName, setDebouncedName] = useState("")
-  const {data, isLoading} = useGetUsers(debouncedName, 1, 5)
+  const {data, isLoading} = useGetUsers(debouncedName, 1, 5, snippetId)
   const [selectedUser, setSelectedUser] = useState<User | undefined>()
 
   useEffect(() => {

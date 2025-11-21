@@ -63,6 +63,7 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['snippet', id]);
       queryClient.invalidateQueries('listSnippets');
+      queryClient.invalidateQueries('users');
     }
   });
 
@@ -154,9 +155,13 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
             </Box>
           </>
         }
-        <ShareSnippetModal loading={loadingShare || isLoading} open={shareModalOppened}
-                           onClose={() => setShareModalOppened(false)}
-                           onShare={handleShareSnippet}/>
+        <ShareSnippetModal
+            loading={loadingShare || isLoading}
+            open={shareModalOppened}
+            onClose={() => setShareModalOppened(false)}
+            onShare={handleShareSnippet}
+            snippetId={id} // Agregar esta prop
+        />
         <TestSnippetModal open={testModalOpened} onClose={() => setTestModalOpened(false)} snippetId={id}/>
         <DeleteConfirmationModal open={deleteConfirmationModalOpen} onClose={() => setDeleteConfirmationModalOpen(false)} id={snippet?.id ?? ""} setCloseDetails={handleCloseModal} />
       </Box>

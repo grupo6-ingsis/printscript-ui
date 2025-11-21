@@ -61,10 +61,13 @@ export const useUpdateSnippetById = ({onSuccess}: {onSuccess: () => void}): UseM
   );
 };
 
-export const useGetUsers = (name: string = "", page: number = 0, pageSize: number = 10) => {
+export const useGetUsers = (name: string = "", page: number = 0, pageSize: number = 10, snippetId?: string) => {
   const snippetOperations = useSnippetsOperations()
 
-  return useQuery<PaginatedUsers, Error>(['users',name,page,pageSize], () => snippetOperations.getUserFriends(name,page, pageSize));
+  return useQuery<PaginatedUsers, Error>(
+      ['users', name, page, pageSize, snippetId],
+      () => snippetOperations.getUserFriends(name, page, pageSize, snippetId)
+  );
 };
 
 export const useShareSnippet = () => {

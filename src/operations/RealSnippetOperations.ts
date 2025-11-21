@@ -65,8 +65,8 @@ export class RealSnippetOperations implements SnippetOperations {
         return await updateSnippetContent(id, updateSnippet.content)
     }
 
-    async getUserFriends(_name?: string, _page?: number, _pageSize?: number): Promise<PaginatedUsers> {
-        return await searchUsers(_name || '', _page || 0, _pageSize || 10);
+    async getUserFriends(_name?: string, _page?: number, _pageSize?: number, _snippetId?: string): Promise<PaginatedUsers> {
+        return await searchUsers(_name || '', _page || 0, _pageSize || 10, _snippetId);
     }
 
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
