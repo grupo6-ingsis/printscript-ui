@@ -21,7 +21,7 @@ import {
     getUserFormattingRules,
     modifyFormattingRule
 } from "../api/formatting.api.ts";
-import {createTestCase, deleteTestCase, getTestCases, runTestSnippet} from "../api/testsnippet.api.ts";
+import {createTestCase, deleteTestCase, getTestCases, runTestSnippet, updateTestCase} from "../api/testsnippet.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -119,9 +119,11 @@ export class RealSnippetOperations implements SnippetOperations {
             expectedOutput: testCase.output,
             snippetId: testCase.snippetId ?? "",
         };
+        if (request.id) {
+            return await updateTestCase(request);
+        }
         return await createTestCase(request);
     }
-
 
     async removeTestCase(id: string): Promise<string> {
         return await deleteTestCase(id);
