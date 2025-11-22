@@ -4,7 +4,14 @@ import {PaginatedUsers} from "../utils/users";
 import {CreateTestSnippetRequest, TestCase} from "../types/TestCase";
 import {TestCaseResult} from "../utils/queries";
 import {FileType, LanguageVersionDto} from "../types/FileType";
-import {FormatConfigDto, FormatRuleDto, LintConfigDto, LintRuleDto, Rule} from "../types/Rule";
+import {
+    FormatConfigDto,
+    FormatRuleDto,
+    FormatSingleSnippetRequest,
+    LintConfigDto,
+    LintRuleDto,
+    Rule
+} from "../types/Rule";
 import {
     createSnippetFromEditor, deleteSnippetById,
     getSnippetById,
@@ -15,8 +22,13 @@ import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
 import {getLintingRules, getUserLintingRules, modifyLintRule} from "../api/linting.api.ts";
 import { searchUsers } from '../api/users.api.ts';
-import {getFormattingRules, getUserFormattingRules, modifyFormattingRule} from "../api/formatting.api.ts";
-import {createTestCase, deleteTestCase, getTestCases, runTestSnippet} from "../api/testsnippet.api.ts";
+import {
+    formatSingleSnippet,
+    getFormattingRules,
+    getUserFormattingRules,
+    modifyFormattingRule
+} from "../api/formatting.api.ts";
+import {createTestCase, deleteTestCase, getTestCases, runTestSnippet, updateTestCase} from "../api/testsnippet.api.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
@@ -53,8 +65,8 @@ export class RealSnippetOperations implements SnippetOperations {
         return await updateSnippetContent(id, updateSnippet.content)
     }
 
-    async getUserFriends(_name?: string, _page?: number, _pageSize?: number): Promise<PaginatedUsers> {
-        return await searchUsers(_name || '', _page || 0, _pageSize || 10);
+    async getUserFriends(_name?: string, _page?: number, _pageSize?: number, _snippetId?: string): Promise<PaginatedUsers> {
+        return await searchUsers(_name || '', _page || 0, _pageSize || 10, _snippetId);
     }
 
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
@@ -102,8 +114,12 @@ export class RealSnippetOperations implements SnippetOperations {
         return await getTestCases(snippetId)
     }
 
-    async formatSnippet(_snippet: string): Promise<string> {
-        throw new Error('Not implemented');
+    async formatSnippet({ snippetId, content }: { snippetId: string, content: string }): Promise<string> {
+        const input: FormatSingleSnippetRequest = {
+            content,
+            snippetId,
+        };
+        return await formatSingleSnippet(input);
     }
 
     async postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {
@@ -114,9 +130,11 @@ export class RealSnippetOperations implements SnippetOperations {
             expectedOutput: testCase.output,
             snippetId: testCase.snippetId ?? "",
         };
+        if (request.id) {
+            return await updateTestCase(request);
+        }
         return await createTestCase(request);
     }
-
 
     async removeTestCase(id: string): Promise<string> {
         return await deleteTestCase(id);

@@ -37,3 +37,7 @@ export type FormatConfigDto = {
     formatRule?: FormatRuleDto,
     ruleValue?: number,
 }
+export type FormatSingleSnippetRequest = {
+    content: string,
+    snippetId: string,
+}

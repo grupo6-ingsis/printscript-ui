@@ -25,6 +25,20 @@ export async function getTestCases(snippetId: string): Promise<TestCase[]> {
 
 export async function runTestSnippet(test: CreateTestSnippetRequest): Promise<TestCaseResult> {
     const { data } = await apiClient.post(`/testsnippet/run`, test);
-    return data.resultType;
+    return data;
 }
 
+export async function updateTestCase(request: CreateTestSnippetRequest): Promise<TestCase> {
+    const id = request.id ?? "";
+    if (!id) {
+        throw new Error("updateTestCase: request.id es requerido");
+    }
+    const { data } = await apiClient.put(`/testsnippet/update/${encodeURIComponent(id)}`, request);
+    return {
+        id: data.id,
+        name: data.name,
+        input: data.input,
+        output: data.expectedOutput,
+        snippetId: data.snippetId ?? data.snippet?.id,
+    };
+}

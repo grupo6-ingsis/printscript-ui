@@ -61,10 +61,13 @@ export const useUpdateSnippetById = ({onSuccess}: {onSuccess: () => void}): UseM
   );
 };
 
-export const useGetUsers = (name: string = "", page: number = 0, pageSize: number = 10) => {
+export const useGetUsers = (name: string = "", page: number = 0, pageSize: number = 10, snippetId?: string) => {
   const snippetOperations = useSnippetsOperations()
 
-  return useQuery<PaginatedUsers, Error>(['users',name,page,pageSize], () => snippetOperations.getUserFriends(name,page, pageSize));
+  return useQuery<PaginatedUsers, Error>(
+      ['users', name, page, pageSize, snippetId],
+      () => snippetOperations.getUserFriends(name, page, pageSize, snippetId)
+  );
 };
 
 export const useShareSnippet = () => {
@@ -83,11 +86,12 @@ export const useGetTestCases = (snippetId: string) => {
 };
 
 
-export const usePostTestCase = () => {
+export const usePostTestCase = (options?: { onSuccess?: () => void }) => {
   const snippetOperations = useSnippetsOperations()
 
   return useMutation<TestCase, Error, Partial<TestCase>>(
-      (tc) => snippetOperations.postTestCase(tc)
+      (tc) => snippetOperations.postTestCase(tc),
+      options
   );
 };
 
@@ -104,7 +108,7 @@ export const useRemoveTestCase = ({onSuccess}: {onSuccess: () => void}) => {
   );
 };
 
-export type TestCaseResult = "SUCCESS" | "FAIL"
+export type TestCaseResult = "SUCCESS" | "FAILURE"
 
 export const useTestSnippet = () => {
   const snippetOperations = useSnippetsOperations()
@@ -151,8 +155,8 @@ export const useModifyLintingRules = ({onSuccess}: {onSuccess: () => void}) => {
 export const useFormatSnippet = () => {
   const snippetOperations = useSnippetsOperations()
 
-  return useMutation<string, Error, string>(
-      snippetContent => snippetOperations.formatSnippet(snippetContent)
+  return useMutation<string, Error, { snippetId: string; content: string }>(
+      params => snippetOperations.formatSnippet(params)
   );
 }
 

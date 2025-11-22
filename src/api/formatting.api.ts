@@ -1,5 +1,5 @@
 import apiClient from "./apiClient.ts";
-import {FormatConfigDto, FormatRuleDto, Rule} from "../types/Rule.ts";
+import {FormatConfigDto, FormatRuleDto, FormatSingleSnippetRequest, Rule} from "../types/Rule.ts";
 
 export async function getFormattingRules(): Promise<FormatRuleDto[]> {
     const { data } = await apiClient.get(`/formatrule/all`);
@@ -31,4 +31,9 @@ export async function modifyFormattingRule(request: Rule): Promise<FormatConfigD
     }
 
     return response.data;
+}
+
+export async function formatSingleSnippet(input: FormatSingleSnippetRequest): Promise<string> {
+    const { data } = await apiClient.post(`/format/snippet`, input);
+    return data;
 }

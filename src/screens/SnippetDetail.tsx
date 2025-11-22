@@ -10,7 +10,6 @@ import {
   useUpdateSnippetById
 } from "../utils/queries.tsx";
 import {useFormatSnippet, useGetSnippetById, useShareSnippet} from "../utils/queries.tsx";
-import {Bòx} from "../components/snippet-table/SnippetBox.tsx";
 import {BugReport, Delete, Download, Save, Share} from "@mui/icons-material";
 import {ShareSnippetModal} from "../components/snippet-detail/ShareSnippetModal.tsx";
 import {TestSnippetModal} from "../components/snippet-test/TestSnippetModal.tsx";
@@ -60,7 +59,13 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
   const {data: snippet, isLoading} = useGetSnippetById(id);
   const {mutate: shareSnippet, isLoading: loadingShare} = useShareSnippet()
   const {mutate: formatSnippet, isLoading: isFormatLoading, data: formatSnippetData} = useFormatSnippet()
-  const {mutate: updateSnippet, isLoading: isUpdateSnippetLoading} = useUpdateSnippetById({onSuccess: () => queryClient.invalidateQueries(['snippet', id])})
+  const {mutate: updateSnippet, isLoading: isUpdateSnippetLoading} = useUpdateSnippetById({
+    onSuccess: () => {
+      queryClient.invalidateQueries(['snippet', id]);
+      queryClient.invalidateQueries('listSnippets');
+      queryClient.invalidateQueries('users');
+    }
+  });
 
   useEffect(() => {
     if (snippet) {
@@ -70,9 +75,9 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
 
   useEffect(() => {
     if (formatSnippetData) {
-      setCode(formatSnippetData)
+      queryClient.invalidateQueries(['snippet', id]);
     }
-  }, [formatSnippetData])
+  }, [formatSnippetData, id])
 
 
   async function handleShareSnippet(userId: string) {
@@ -109,9 +114,10 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
               {/*</Tooltip>*/}
               {/* TODO: we can implement a live mode*/}
               <Tooltip title={"Format"}>
-                <IconButton onClick={() => formatSnippet(code)} disabled={isFormatLoading}>
-                  <ReadMoreIcon />
-                </IconButton>
+                  <IconButton onClick={() => formatSnippet({ snippetId: id, content: code })} disabled={isFormatLoading}>
+                      <ReadMoreIcon />
+                  </IconButton>
+
               </Tooltip>
               <Tooltip title={"Save changes"}>
                 <IconButton color={"primary"} onClick={() => {
@@ -128,7 +134,7 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
               </Tooltip>
             </Box>
             <Box display={"flex"} gap={2}>
-              <Bòx flex={1} height={"fit-content"} overflow={"none"} minHeight={"500px"} bgcolor={'black'} color={'white'} code={code}>
+              <Box flex={1} height={"fit-content"} overflow={"none"} minHeight={"500px"} bgcolor={'black'} color={'white'}>
                 <Editor
                     value={code}
                     padding={10}
@@ -141,7 +147,7 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
                       fontSize: 17,
                     }}
                 />
-              </Bòx>
+              </Box>
             </Box>
             <Box pt={1} flex={1} marginTop={2}>
               <Alert severity="info">Output</Alert>
@@ -149,12 +155,15 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
             </Box>
           </>
         }
-        <ShareSnippetModal loading={loadingShare || isLoading} open={shareModalOppened}
-                           onClose={() => setShareModalOppened(false)}
-                           onShare={handleShareSnippet}/>
+        <ShareSnippetModal
+            loading={loadingShare || isLoading}
+            open={shareModalOppened}
+            onClose={() => setShareModalOppened(false)}
+            onShare={handleShareSnippet}
+            snippetId={id} // Agregar esta prop
+        />
         <TestSnippetModal open={testModalOpened} onClose={() => setTestModalOpened(false)} snippetId={id}/>
         <DeleteConfirmationModal open={deleteConfirmationModalOpen} onClose={() => setDeleteConfirmationModalOpen(false)} id={snippet?.id ?? ""} setCloseDetails={handleCloseModal} />
       </Box>
   );
 }
-
