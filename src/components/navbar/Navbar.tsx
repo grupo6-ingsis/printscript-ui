@@ -3,6 +3,7 @@ import {Code, Rule, Logout} from "@mui/icons-material";
 import {ReactNode} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth0} from "@auth0/auth0-react";
+import {clearToken} from "../../utils/auth/auth.ts";
 
 type PageType = {
     title: string;
@@ -31,6 +32,7 @@ export const Navbar = () => {
                 returnTo: window.location.origin
             }
         });
+        clearToken()
     };
     return (
         <AppBar position="static" elevation={0}>

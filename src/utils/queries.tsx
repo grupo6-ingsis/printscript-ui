@@ -8,6 +8,7 @@ import {Rule} from "../types/Rule.ts";
 import {RealSnippetOperations} from "../operations/RealSnippetOperations.ts";
 import {useAuth0} from "@auth0/auth0-react";
 import {useEffect} from "react";
+import {setToken} from "./auth/auth.ts";
 
 
 export const useSnippetsOperations = () => {
@@ -15,7 +16,7 @@ export const useSnippetsOperations = () => {
   useEffect(() => {
       getAccessTokenSilently()
           .then(token => {
-              console.log(token)
+              setToken(token)
           })
           .catch(error => console.error(error));
   }, [getAccessTokenSilently]);
