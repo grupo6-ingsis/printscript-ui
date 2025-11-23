@@ -8,6 +8,7 @@ import {
 } from "../utils/snippet.ts";
 import apiClient from "./apiClient.ts";
 import {getUsersByIds} from "./users.api.ts";
+import {InterpretSnippetRequest, InterpretSnippetResponse} from "../types/InterpretSnippet.ts";
 
 export async function createSnippetFromEditor(input: CreateSnippet): Promise<Snippet> {
     const transformedInput = {
@@ -105,4 +106,9 @@ export function mapShareSnippetResponseToSnippet(response: ShareSnippetResponseD
         compliance: "PENDING" as ComplianceEnum,
         author: response.userId,
     }
+}
+
+export async function interpretSnippet(input: InterpretSnippetRequest, snippetId: string): Promise<InterpretSnippetResponse> {
+    const { data } = await apiClient.post(`/interpret/${snippetId}`, input)
+    return data;
 }

@@ -16,7 +16,7 @@ import {
     createSnippetFromEditor, deleteSnippetById,
     getSnippetById,
     getSnippetsPaginated, shareSnippetWithUser,
-    updateSnippetContent
+    updateSnippetContent, interpretSnippet
 } from "../api/snippet.api.ts";
 import {setTokenGetter} from "../api/apiClient.ts";
 import {getSupportedLanguages, getSupportedLanguageVersions} from "../api/languages.api.ts";
@@ -29,10 +29,15 @@ import {
     modifyFormattingRule
 } from "../api/formatting.api.ts";
 import {createTestCase, deleteTestCase, getTestCases, runTestSnippet, updateTestCase} from "../api/testsnippet.api.ts";
+import {InterpretSnippetRequest, InterpretSnippetResponse} from "../types/InterpretSnippet.ts";
 
 export class RealSnippetOperations implements SnippetOperations {
     constructor(getAccessTokenSilently: () => Promise<string>) {
         setTokenGetter(getAccessTokenSilently);
+    }
+
+    async interpretSnippet(request: InterpretSnippetRequest, snippetId: string): Promise<InterpretSnippetResponse> {
+        return await interpretSnippet(request, snippetId);
     }
     async listSnippetDescriptors(_page: number, _pageSize: number, _snippetName?: string, _filters?: SnippetFilters): Promise<PaginatedSnippets> {
         return await getSnippetsPaginated(_page, _pageSize, _snippetName, _filters);
@@ -205,6 +210,7 @@ export class RealSnippetOperations implements SnippetOperations {
         }
         return this.getLintingRules();
     }
+
 
 
 
