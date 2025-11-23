@@ -8,6 +8,8 @@ import {TestCaseResult} from "../queries.tsx";
 import {FileType, LanguageVersionDto} from "../../types/FileType.ts";
 import {Rule} from "../../types/Rule.ts";
 import {getSupportedLanguageVersions} from "../../api/languages.api.ts";
+import {InterpretSnippetRequest, InterpretSnippetResponse} from "../../types/InterpretSnippet.ts";
+import {interpretSnippet} from "../../api/snippet.api.ts";
 
 const DELAY: number = 1000
 
@@ -24,7 +26,11 @@ export class FakeSnippetOperations implements SnippetOperations {
     })
   }
 
-  getSnippetById(id: string): Promise<Snippet | undefined> {
+  interpretSnippet(request: InterpretSnippetRequest, snippetId: string): Promise<InterpretSnippetResponse> {
+    return interpretSnippet(request,snippetId);
+  }
+
+    getSnippetById(id: string): Promise<Snippet | undefined> {
     return new Promise(resolve => {
       setTimeout(() => resolve(this.fakeStore.getSnippetById(id)), DELAY)
     })

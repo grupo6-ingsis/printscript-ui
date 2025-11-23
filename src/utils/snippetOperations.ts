@@ -4,6 +4,7 @@ import {TestCase} from "../types/TestCase.ts";
 import {TestCaseResult} from "./queries.tsx";
 import {FileType, LanguageVersionDto} from "../types/FileType.ts";
 import {Rule} from "../types/Rule.ts";
+import {InterpretSnippetRequest, InterpretSnippetResponse} from "../types/InterpretSnippet.ts";
 
 export type {SnippetFilters}
 export interface SnippetOperations {
@@ -42,5 +43,7 @@ export interface SnippetOperations {
   modifyLintingRule(newRules: Rule[]): Promise<Rule[]>
 
     getSupportedLanguageVersions(languageName: string): Promise<LanguageVersionDto>;
+
+  interpretSnippet(request: InterpretSnippetRequest, snippetId: string): Promise<InterpretSnippetResponse>;
 
 }

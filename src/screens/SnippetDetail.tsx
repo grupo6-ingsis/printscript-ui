@@ -4,7 +4,7 @@ import {highlight, languages} from "prismjs";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/themes/prism-okaidia.css";
-import {Alert, Box, CircularProgress, IconButton, Tooltip, Typography} from "@mui/material";
+import {Alert, Box, Button, CircularProgress, IconButton, TextField, Tooltip, Typography} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import {
   useUpdateSnippetById
@@ -18,6 +18,7 @@ import {SnippetExecution} from "./SnippetExecution.tsx";
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import {queryClient} from "../App.tsx";
 import {DeleteConfirmationModal} from "../components/snippet-detail/DeleteConfirmationModal.tsx";
+import { interpretSnippet } from "../api/snippet.api";
 
 type SnippetDetailProps = {
   id: string;
@@ -55,6 +56,11 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
   const [shareModalOppened, setShareModalOppened] = useState(false)
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false)
   const [testModalOpened, setTestModalOpened] = useState(false);
+
+  // State for interpret inputs and output
+  const [interpretInput, setInterpretInput] = useState("");
+  const [interpretOutput, setInterpretOutput] = useState<string | null>(null);
+  const [isInterpreting, setIsInterpreting] = useState(false);
 
   const {data: snippet, isLoading} = useGetSnippetById(id);
   const {mutate: shareSnippet, isLoading: loadingShare} = useShareSnippet()
@@ -147,6 +153,48 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
                       fontSize: 17,
                     }}
                 />
+                {/* Interpret input and button */}
+                <Box mt={2} mb={2} display="flex" gap={2} alignItems="center">
+                  <TextField
+                    label="Type here (comma-separated)"
+                    value={interpretInput}
+                    onChange={e => setInterpretInput(e.target.value)}
+                    size="small"
+                    variant="outlined"
+                    sx={{ background: 'white', borderRadius: 1, flex: 1 }}
+                  />
+                  <Button
+                    variant="contained"
+                    disabled={isInterpreting || !interpretInput.trim()}
+                    onClick={async () => {
+                      if (!snippet) return;
+                      setIsInterpreting(true);
+                      try {
+                        const inputs = interpretInput.split(',').map(s => s.trim()).filter(Boolean);
+                        const request = {
+                          snippetContent: code,
+                          version: snippet.version,
+                          inputs,
+                        };
+                        const response = await interpretSnippet(request, id);
+                        setInterpretOutput(response.output);
+                        console.log("Interpret output:", response.output);
+                      } catch (err) {
+                        setInterpretOutput("Error interpreting snippet");
+                        console.error("Interpret error:", err);
+                      } finally {
+                        setIsInterpreting(false);
+                      }
+                    }}
+                  >
+                    Interpret
+                  </Button>
+                </Box>
+                {interpretOutput && (
+                  <Alert severity="success" sx={{ mt: 1 }}>
+                    Output: {interpretOutput}
+                  </Alert>
+                )}
               </Box>
             </Box>
             <Box pt={1} flex={1} marginTop={2}>
