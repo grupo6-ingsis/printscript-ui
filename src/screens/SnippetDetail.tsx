@@ -59,7 +59,8 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
 
   // State for interpret inputs and output
   const [interpretInput, setInterpretInput] = useState("");
-  const [interpretOutput, setInterpretOutput] = useState<string | null>(null);
+  const [interpretOutput, setInterpretOutput] = useState<string[] | string | null>(null);
+  const [interpretResultType, setInterpretResultType] = useState<'SUCCESS' | 'FAILURE' | null>(null);
   const [isInterpreting, setIsInterpreting] = useState(false);
 
   const {data: snippet, isLoading} = useGetSnippetById(id);
@@ -177,10 +178,12 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
                           inputs,
                         };
                         const response = await interpretSnippet(request, id);
-                        setInterpretOutput(response.output);
-                        console.log("Interpret output:", response.output);
+                        setInterpretOutput(response.outputs);
+                        setInterpretResultType(response.resultType);
+                        console.log("Interpret outputs:", response.outputs, "ResultType:", response.resultType);
                       } catch (err) {
                         setInterpretOutput("Error interpreting snippet");
+                        setInterpretResultType('FAILURE');
                         console.error("Interpret error:", err);
                       } finally {
                         setIsInterpreting(false);
@@ -190,9 +193,39 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
                     Interpret
                   </Button>
                 </Box>
-                {interpretOutput && (
+                {Array.isArray(interpretOutput) && interpretOutput.length > 0 && interpretResultType === 'SUCCESS' && (
                   <Alert severity="success" sx={{ mt: 1 }}>
-                    Output: {interpretOutput}
+                    Output:
+                    <ul style={{margin: 0, paddingLeft: 20}}>
+                      {interpretOutput.map((line, idx) => (
+                        <li key={idx}>{line}</li>
+                      ))}
+                    </ul>
+                  </Alert>
+                )}
+                {Array.isArray(interpretOutput) && interpretOutput.length > 0 && interpretResultType === 'FAILURE' && (
+                  <Alert severity="error" sx={{ mt: 1 }}>
+                    Error:
+                    <ul style={{margin: 0, paddingLeft: 20}}>
+                      {interpretOutput.map((line, idx) => (
+                        <li key={idx}>{line}</li>
+                      ))}
+                    </ul>
+                  </Alert>
+                )}
+                {Array.isArray(interpretOutput) && interpretOutput.length === 0 && interpretResultType === 'FAILURE' && (
+                  <Alert severity="error" sx={{ mt: 1 }}>
+                    Error: No output returned. There was a problem interpreting the snippet.
+                  </Alert>
+                )}
+                {Array.isArray(interpretOutput) && interpretOutput.length === 0 && interpretResultType === 'SUCCESS' && (
+                  <Alert severity="info" sx={{ mt: 1 }}>
+                    No output was produced by the snippet.
+                  </Alert>
+                )}
+                {typeof interpretOutput === 'string' && interpretOutput && (
+                  <Alert severity="error" sx={{ mt: 1 }}>
+                    {interpretOutput}
                   </Alert>
                 )}
               </Box>
