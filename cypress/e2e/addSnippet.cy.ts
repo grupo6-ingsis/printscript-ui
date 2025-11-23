@@ -45,7 +45,8 @@ describe('Add snippet tests', () => {
     /* ==== Generated with Cypress Studio ==== */
     cy.get('[data-testid="upload-file-input"').selectFile("cypress/fixtures/example_ps.ps", {force: true})
 
-    cy.get('[data-testid="SaveIcon"]').click();
+    // Wait for modal to open and SaveIcon to be available
+    cy.get('[data-testid="SaveIcon"]', {timeout: 10000}).should('be.visible').click();
 
     cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
