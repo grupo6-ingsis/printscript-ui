@@ -129,7 +129,7 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
                 <IconButton color={"primary"} onClick={() => {
                   console.log('Save button clicked', {id, code, snippetContent: snippet?.content});
                   updateSnippet({id: id, updateSnippet: {content: code}});
-                }} disabled={isUpdateSnippetLoading || snippet?.content === code} >
+                }} disabled={isUpdateSnippetLoading || snippet?.content === code} data-testid="SaveIcon">
                   <Save />
                 </IconButton>
               </Tooltip>
