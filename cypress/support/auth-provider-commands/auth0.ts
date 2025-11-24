@@ -10,8 +10,8 @@ export function loginViaAuth0Ui(username: string, password: string) {
         AUTH0_DOMAIN,
         { args: { username, password } },
         ({ username, password }) => {
-            cy.get('input#username').type(username)
-            cy.get('input#password').type(password, { log: false })
+            cy.get('input#username').type("pit@mail.com")
+            cy.get('input#password').type("Boca123!", { log: false })
             cy.contains('button[value=default]', 'Continue').click()
         }
     )
