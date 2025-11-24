@@ -5,6 +5,6 @@ export type InterpretSnippetRequest = {
 }
 
 export type InterpretSnippetResponse = {
-    outputs: string[],
+    results: string[],
     resultType:'SUCCESS' | 'FAILURE',
 }
