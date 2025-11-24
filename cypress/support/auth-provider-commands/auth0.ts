@@ -1,10 +1,13 @@
+import {AUTH0_DOMAIN} from "../../../src/utils/constants";
+
 export function loginViaAuth0Ui(username: string, password: string) {
     // App landing page redirects to Auth0.
     cy.visit('/')
 
     // Login on Auth0.
+    process.env.AUTH0_DOMAIN = Cypress.env("AUTH0_DOMAIN");
     cy.origin(
-       "https://dev-dxya2auaytwzj1s4.us.auth0.com",
+        AUTH0_DOMAIN,
         { args: { username, password } },
         ({ username, password }) => {
             cy.get('input#username').type(username)
