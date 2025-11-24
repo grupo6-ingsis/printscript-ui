@@ -24,7 +24,6 @@ describe('Add snippet tests', () => {
       cy.contains('Create snippet').click();
     cy.get('#name').type('Some snippet name');
     cy.get('#demo-simple-select').click()
-      cy.contains('Printscript').click()
     cy.get('[data-testid="add-snippet-code-editor"]').click();
     cy.get('[data-testid="add-snippet-code-editor"]').type(`const snippet: String = "some snippet" \n print(snippet)`);
     cy.get('[data-testid="SaveIcon"]').click();
