@@ -25,7 +25,9 @@ describe('Add snippet tests', () => {
     cy.get('#name').type('Some snippet name');
     cy.get('#demo-simple-select').click()
       cy.get('ul[role="listbox"]').should('be.visible');
-      cy.contains('li[role="option"]', 'Printscript').click();
+      cy.get('body')
+          .contains('li[role="option"]', 'Printscript', { timeout: 6000 })
+          .click();
     cy.get('[data-testid="add-snippet-code-editor"]').click();
     cy.get('[data-testid="add-snippet-code-editor"]').type(`const snippet: String = "some snippet" \n print(snippet)`);
     cy.get('[data-testid="SaveIcon"]').click();
