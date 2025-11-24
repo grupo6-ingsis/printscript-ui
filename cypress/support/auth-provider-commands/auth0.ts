@@ -17,7 +17,7 @@ export function loginViaAuth0Ui(username: string, password: string) {
     )
 
     // Ensure Auth0 has redirected us back to the RWA.
-    cy.url().should('equal', 'http://localhost')
+    cy.url().should('equal', 'http://localhost/')
     
     // Wait for the token to be saved in localStorage
     cy.window().its('localStorage').invoke('getItem', 'authAccessToken').should('exist')
