@@ -3,8 +3,8 @@ import {AUTH0_USERNAME, BACKEND_URL} from "../../src/utils/constants";
 describe('Add snippet tests', () => {
   beforeEach(() => {
     cy.log("Logging in with user: " + AUTH0_USERNAME);
-    const username = Cypress.env('AUTH0_USERNAME');
-    const password = Cypress.env('AUTH0_PASSWORD');
+    const username = "pit@mail.com";
+    const password = "Boca123!";
     cy.loginToAuth0(
         username,
         password
