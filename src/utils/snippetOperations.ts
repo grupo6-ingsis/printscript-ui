@@ -47,3 +47,4 @@ export interface SnippetOperations {
   interpretSnippet(request: InterpretSnippetRequest, snippetId: string): Promise<InterpretSnippetResponse>;
 
 }
+

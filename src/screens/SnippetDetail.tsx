@@ -150,9 +150,9 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
                         </Box>
                     </Box>
                     <Box pt={1} flex={1} marginTop={2}>
-                        <Alert severity="info">Output</Alert>
-                        <SnippetExecution />
-                    </Box>
+              <Alert severity="info">Output</Alert>
+               <SnippetExecution snippetId={id} content={code} version={snippet?.version ?? ""} />
+            </Box>
                 </>
             }
             <ShareSnippetModal

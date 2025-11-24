@@ -1,41 +1,57 @@
 import {OutlinedInput} from "@mui/material";
-import {highlight, languages} from "prismjs";
-import Editor from "react-simple-code-editor";
-import {Bòx} from "../components/snippet-table/SnippetBox.tsx";
 import {useState} from "react";
+import {useInterpretSnippet} from "../utils/queries";
 
-export const SnippetExecution = () => {
-  // Here you should provide all the logic to connect to your sockets.
-  const [input, setInput] = useState<string>("")
+export const SnippetExecution = ({snippetId, content, version}: {snippetId: string, content: string, version: string}) => {
+  const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const { mutateAsync, isLoading } = useInterpretSnippet();
 
-  //TODO: get the output from the server
-  const code = output.join("\n")
-
-  const handleEnter = (event: { key: string }) => {
-    if (event.key === 'Enter') {
-      //TODO: logic to send inputs to server
-      setOutput([...output, input])
-      setInput("")
+  const handleEnter = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && input.trim()) {
+      setError(null);
+      try {
+        const inputs = input.split(",").map(s => s.trim()).filter(Boolean);
+        const request = {
+          snippetContent: content,
+          version,
+          inputs,
+        };
+        const response = await mutateAsync({ request, snippetId });
+        if (response.resultType === "FAILURE") {
+          setError("Error: " + (response.outputs?.join("\n") || "Execution failed"));
+          setOutput([]);
+        } else {
+          setError(null);
+          setOutput(response.outputs || []);
+        }
+      } catch (e) {
+        setError("Server error");
+        setOutput([]);
+      }
+      setInput("");
     }
   };
 
-    return (
-      <>
-        <Bòx flex={1} overflow={"none"} minHeight={200} bgcolor={'black'} color={'white'} code={code}>
-            <Editor
-              value={code}
-              padding={10}
-              onValueChange={(code) => setInput(code)}
-              highlight={(code) => highlight(code, languages.js, 'javascript')}
-              maxLength={1000}
-              style={{
-                  fontFamily: "monospace",
-                  fontSize: 17,
-              }}
-            />
-        </Bòx>
-        <OutlinedInput onKeyDown={handleEnter} value={input} onChange={e => setInput(e.target.value)} placeholder="Type here" fullWidth/>
-      </>
-    )
+  return (
+    <>
+      <div style={{background: "black", color: "white", minHeight: 200, padding: 10, fontFamily: "monospace"}}>
+        {error && <div style={{color: "#ff5252"}}>{error}</div>}
+        {output.flatMap((line, idx) =>
+          line.split('\n').map((subLine, subIdx) => (
+            <div key={`${idx}-${subIdx}`}>{subLine}</div>
+          ))
+        )}
+      </div>
+      <OutlinedInput
+        onKeyDown={handleEnter}
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        placeholder="Type comma-separated inputs and press Enter"
+        fullWidth
+        disabled={isLoading}
+      />
+    </>
+  );
 }

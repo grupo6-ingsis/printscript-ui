@@ -9,6 +9,7 @@ import {RealSnippetOperations} from "../operations/RealSnippetOperations.ts";
 import {useAuth0} from "@auth0/auth0-react";
 import {useEffect} from "react";
 import {setToken} from "./auth/auth.ts";
+import { InterpretSnippetRequest, InterpretSnippetResponse } from '../types/InterpretSnippet';
 
 
 export const useSnippetsOperations = () => {
@@ -188,3 +189,10 @@ export const useGetSupportedLanguageVersions = (languageName: string) => {
         { enabled: !!languageName }
     );
 };
+
+export function useInterpretSnippet() {
+  const snippetOperations = useSnippetsOperations();
+  return useMutation<InterpretSnippetResponse, Error, { request: InterpretSnippetRequest; snippetId: string }>(
+    ({ request, snippetId }) => snippetOperations.interpretSnippet(request, snippetId)
+  );
+}
