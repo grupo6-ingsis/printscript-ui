@@ -20,8 +20,8 @@ describe('Add snippet tests', () => {
     }).as('postRequest');
 
     /* ==== Generated with Cypress Studio ==== */
-    cy.get('.css-9jay18 > .MuiButton-root').click();
-    cy.get('.MuiList-root > [tabindex="0"]').click();
+      cy.contains('button', 'Add Snippet').click();
+      cy.contains('Create snippet').click();
     cy.get('#name').type('Some snippet name');
     cy.get('#demo-simple-select').click()
     cy.get('[data-testid="menu-option-printscript"]').click()
