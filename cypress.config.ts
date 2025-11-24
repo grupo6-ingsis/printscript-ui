@@ -9,6 +9,6 @@ export default defineConfig({
       return config
     },
     experimentalStudio: true,
-    baseUrl: process.env.FRONTEND_URL ?? "http://localhost:3000",
+    baseUrl: process.env.FRONTEND_URL ?? "http://localhost",
   },
 });
