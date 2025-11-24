@@ -11,6 +11,8 @@ describe('Home', () => {
   before(() => {
     process.env.FRONTEND_URL = Cypress.env("FRONTEND_URL");
     process.env.BACKEND_URL = Cypress.env("BACKEND_URL");
+    process.env.AUTH0_USERNAME = Cypress.env("AUTH0_USERNAME");
+    process.env.AUTH0_PASSWORD = Cypress.env("AUTH0_PASSWORD");
   })
   it('Renders home', () => {
     cy.visit(FRONTEND_URL)
