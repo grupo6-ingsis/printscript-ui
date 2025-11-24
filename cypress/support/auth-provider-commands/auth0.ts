@@ -6,7 +6,7 @@ export function loginViaAuth0Ui(username: string, password: string) {
 
     // Login on Auth0.
     cy.origin(
-        Cypress.env('VITE_AUTH0_DOMAIN'),
+        Cypress.env('dev-dxya2auaytwzj1s4.us.auth0.com'),
         { args: { username, password } },
         ({ username, password }) => {
             cy.get('input#username').type(username)
@@ -16,7 +16,7 @@ export function loginViaAuth0Ui(username: string, password: string) {
     )
 
     // Ensure Auth0 has redirected us back to the RWA.
-    cy.url().should('equal', 'http://localhost:3000/')
+    cy.url().should('equal', 'http://localhost')
     
     // Wait for the token to be saved in localStorage
     cy.window().its('localStorage').invoke('getItem', 'authAccessToken').should('exist')
