@@ -1,12 +1,10 @@
-
-
 export function loginViaAuth0Ui(username: string, password: string) {
     // App landing page redirects to Auth0.
     cy.visit('/')
 
     // Login on Auth0.
     cy.origin(
-        Cypress.env('dev-dxya2auaytwzj1s4.us.auth0.com'),
+       "https://dev-dxya2auaytwzj1s4.us.auth0.com",
         { args: { username, password } },
         ({ username, password }) => {
             cy.get('input#username').type(username)
