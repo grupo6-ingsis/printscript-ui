@@ -1,4 +1,4 @@
-import {OutlinedInput} from "@mui/material";
+import {OutlinedInput, Button} from "@mui/material";
 import {useState} from "react";
 import {useInterpretSnippet} from "../utils/queries";
 
@@ -34,6 +34,28 @@ export const SnippetExecution = ({snippetId, content, version}: {snippetId: stri
     }
   };
 
+  const handleNoInput = async () => {
+    setError(null);
+    try {
+      const request = {
+        snippetContent: content,
+        version,
+        inputs: [],
+      };
+      const response = await mutateAsync({ request, snippetId });
+      if (response.resultType === "FAILURE") {
+        setError("Error: " + (response.results?.join("\n") || "Execution failed"));
+        setOutput([]);
+      } else {
+        setError(null);
+        setOutput(response.results || []);
+      }
+    } catch (e) {
+      setError("Server error");
+      setOutput([]);
+    }
+  };
+
   return (
     <>
       <div style={{background: "black", color: "white", minHeight: 200, padding: 10, fontFamily: "monospace"}}>
@@ -48,6 +70,14 @@ export const SnippetExecution = ({snippetId, content, version}: {snippetId: stri
         fullWidth
         disabled={isLoading}
       />
+      <Button
+        variant="contained"
+        sx={{ mt: 1 }}
+        onClick={handleNoInput}
+        disabled={isLoading}
+      >
+        Interpretar sin inputs
+      </Button>
     </>
   );
 }
