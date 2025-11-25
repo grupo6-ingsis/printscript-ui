@@ -24,9 +24,10 @@ describe('Add snippet tests', () => {
       cy.contains('button', 'Add Snippet').click();
       cy.contains('Create snippet').click();
     cy.get('#name').type('Some snippet name');
-      cy.get('#demo-simple-select').click({ force: true });
-      cy.get('.MuiPopover-root ul[role="listbox"]', { timeout: 8000 })
+      cy.get('#demo-simple-select').click();
+      cy.get('li[data-testid^="language-option-"]', { timeout: 8000 })
           .should('be.visible')
+          .first()
           .click();
       cy.get('#description').type('This is a test description');
       cy.get('[data-testid="add-snippet-code-editor"]').click();
