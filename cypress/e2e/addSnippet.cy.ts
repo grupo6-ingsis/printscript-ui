@@ -23,8 +23,16 @@ describe('Add snippet tests', () => {
       cy.contains('button', 'Add Snippet').click();
       cy.contains('Create snippet').click();
     cy.get('#name').type('Some snippet name');
-    cy.get('#demo-simple-select').click();
-    cy.get('[data-testid="language-option-Printscript"]').should('be.visible').click();
+      cy.get('#demo-simple-select').click();
+
+// Espera a que se renderice el menú completo
+      cy.get('ul[role="listbox"]').should('exist');
+
+// Ahora sí, seleccionar
+      cy.get('[data-testid="language-option-Printscript"]')
+          .should('be.visible')
+          .click();
+
       cy.get('[data-testid="add-snippet-code-editor"]').click();
     cy.get('[data-testid="add-snippet-code-editor"]').type(`const snippet: String = "some snippet" \n print(snippet)`);
     cy.get('[data-testid="SaveIcon"]').click();
