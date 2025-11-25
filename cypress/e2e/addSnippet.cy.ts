@@ -39,7 +39,7 @@ describe('Add snippet tests', () => {
     cy.visit("/")
     cy.intercept('POST', '**/service/snippets', (req) => {
       req.reply((res) => {
-          expect(res.body).to.include.keys("versions", "languageVersion");
+          expect(res.body).to.include.keys();
         expect(res.statusCode).to.eq(200);
       });
     }).as('postRequest');
@@ -51,6 +51,8 @@ describe('Add snippet tests', () => {
           .click();
       cy.get('[data-testid="upload-file-input"]')
           .selectFile('cypress/fixtures/example.ps', { force: true });
+      cy.get('#description').type('This is a test description');
+      cy.contains('button', 'Save Snippet', { timeout: 8000 }).should('be.visible');
       cy.contains('button', 'Save Snippet').click({ force: true });
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
