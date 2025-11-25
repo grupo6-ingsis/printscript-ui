@@ -31,7 +31,7 @@ describe('Add snippet tests', () => {
       cy.get('#description').type('This is a test description');
       cy.get('[data-testid="add-snippet-code-editor"]').click();
     cy.get('[data-testid="add-snippet-code-editor"]').type(`let snippet: String = "some snippet"; \nprintln(snippet);`);
-      cy.contains('button', 'Save Snippet').click({ force: true });
+      cy.contains('button', 'Save Snippet').should('be.visible').should('not.be.disabled').click();
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
 
@@ -52,7 +52,7 @@ describe('Add snippet tests', () => {
       cy.get('[data-testid="upload-file-input"]')
           .selectFile('cypress/fixtures/example.ps', { force: true });
       cy.get('#description').type('This is a test description');
-      cy.contains('button', 'Save Snippet').click({ force: true });
+      cy.contains('button', 'Save Snippet').should('be.visible').should('not.be.disabled').click();
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
 })
