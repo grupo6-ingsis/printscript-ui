@@ -47,7 +47,7 @@ describe('Add snippet tests', () => {
     /* ==== Generated with Cypress Studio ==== */
     cy.get('[data-testid="upload-file-input"').selectFile("cypress/fixtures/example.ps", {force: true})
       // 2. Igual que en "manual": rellenar campos necesarios
-      cy.get('#name').type('example_ps');
+      cy.get('#name').type('example');
 
       // Abrir dropdown Language
       cy.get('#demo-simple-select').click({ force: true });
