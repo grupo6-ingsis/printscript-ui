@@ -52,8 +52,11 @@ describe('Add snippet tests', () => {
       cy.get('[data-testid="upload-file-input"]')
           .selectFile('cypress/fixtures/example.ps', { force: true });
       cy.get('#description').type('This is a test description');
-      cy.contains('button', 'Save Snippet', { timeout: 8000 }).should('be.visible');
-      cy.contains('button', 'Save Snippet').click({ force: true });
+      cy.contains('button', 'Save Snippet')
+          .scrollIntoView()
+          .should('be.visible')
+          .click({ force: true });
+
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
 })
