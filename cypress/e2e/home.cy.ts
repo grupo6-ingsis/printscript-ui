@@ -24,8 +24,7 @@ describe('Home', () => {
             .should('be.visible');
 
         // Botón visible
-        cy.get('.css-9jay18 > .MuiButton-root')
-            .should('be.visible');
+        cy.contains('Add Snippet').should('be.visible');
 
         // Click en menú (si corresponde)
         cy.get('.css-jie5ja').click();

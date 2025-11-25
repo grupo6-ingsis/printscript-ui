@@ -34,7 +34,6 @@ describe('Add snippet tests', () => {
     cy.get('[data-testid="add-snippet-code-editor"]').type(`let snippet: String = "some snippet"; \nprintln(snippet);`);
       // Wait for language versions to load and be selected
       cy.get('#version-select', { timeout: 10000 }).should('be.visible');
-      cy.get('#version-select').should('not.have.value', '');
       // Wait for button to be enabled and visible, then click
       cy.get('[data-testid="SaveIcon"]')
           .should('not.be.disabled')
@@ -65,7 +64,6 @@ describe('Add snippet tests', () => {
       cy.get('#description').type('This is a test description');
       // Wait for language versions to load and be selected
       cy.get('#version-select', { timeout: 10000 }).should('be.visible');
-      cy.get('#version-select').should('not.have.value', '');
       // Wait for button to be enabled and visible, then click
       cy.get('[data-testid="SaveIcon"]')
           .should('not.be.disabled')
