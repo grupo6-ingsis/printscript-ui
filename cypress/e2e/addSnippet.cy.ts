@@ -15,15 +15,7 @@ describe('Add snippet tests', () => {
       cy.intercept('POST', '**/service/snippets', (req) => {
           req.reply((res) => {
               expect(res.statusCode).to.eq(200);
-              expect(res.body).to.include.keys(
-                  "id",
-                  "name",
-                  "content",
-                  "language",
-                  "extension",
-                  "version",
-                  "description"
-              );
+              expect(res.body).to.include.keys("id", "title", "description", "languageVersion");
           });
       }).as('postRequest');
 
