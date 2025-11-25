@@ -52,7 +52,7 @@ describe('Home', () => {
 
     cy.request({
       method: 'POST',
-      url: '/snippets', // Adjust if you have a different base URL configured in Cypress
+      url: '**/service/snippets', // Adjust if you have a different base URL configured in Cypress
       body: snippetData,
       failOnStatusCode: false // Optional: set to true if you want the test to fail on non-2xx status codes
     }).then((response) => {
