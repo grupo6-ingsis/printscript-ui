@@ -55,9 +55,10 @@ describe('Home', () => {
         cy.intercept('GET', '**/service/snippets*').as('getSnippets');
 
         // IMPORTANTE: cy.request requiere URL absoluta
+        const normalizedBackendUrl = "https://snippet-searcher-app-dev.duckdns.org/service";
         cy.request({
             method: 'POST',
-            url: `${Cypress.env("http://localhost")}/service/snippets`,
+            url: `${normalizedBackendUrl}/snippets`,
             body: snippetData,
             failOnStatusCode: false
         }).then((response) => {
