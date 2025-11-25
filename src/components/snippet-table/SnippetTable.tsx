@@ -89,7 +89,8 @@ export const SnippetTable = (props: SnippetTableProps) => {
             <InputBase
                 sx={{ml: 1, flex: 1}}
                 placeholder="Search Snippet"
-                inputProps={{'aria-label': 'search'}}
+                inputProps={{'aria-label': 'search', 'data-testid': 'search-snippet-input'}}
+                type="text"
                 onChange={e => handleSearchSnippet(e.target.value)}
             />
               
