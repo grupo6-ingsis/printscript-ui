@@ -106,8 +106,12 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
                     value={language}
                     onChange={(e: SelectChangeEvent<string>) => setLanguage(e.target.value)}
                     sx={{ width: '50%' }}
+                    MenuProps={{
+                        disablePortal: true,
+                        transitionDuration: 0
+                    }}
                 >
-                    {fileTypes?.map((x) => (
+                {fileTypes?.map((x) => (
                         <MenuItem key={x.language} value={x.language}>
                             {capitalize(x.language)}
                         </MenuItem>
