@@ -46,14 +46,12 @@ describe('Add snippet tests', () => {
 
     /* ==== Generated with Cypress Studio ==== */
       cy.contains('button', 'Add Snippet').click();
-      cy.contains('button', 'Load snippet from file').should('be.visible').click({ force: true });
-      cy.get('[data-testid="upload-file-input"]').selectFile('cypress/fixtures/example.ps', { force: true });
-// Optionally, check that fields are auto-filled here
+      cy.contains('li', 'Load snippet from file')
+          .should('be.visible')
+          .click();
+      cy.get('[data-testid="upload-file-input"]')
+          .selectFile('cypress/fixtures/test-snippet.ts', { force: true });
       cy.contains('button', 'Save Snippet').click({ force: true });
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
-
-      cy.contains('button', 'Save Snippet').click({ force: true });
-
-    cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
 })
