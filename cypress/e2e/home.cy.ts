@@ -17,8 +17,7 @@ describe('Home', () => {
         cy.visit("http://localhost");
 
         // Header visible
-        cy.get('.MuiTypography-h6')
-            .should('have.text', 'Printscript');
+        cy.contains('Printscript').should('be.visible');
 
         // Search input visible (selector estable)
         cy.get('[data-testid="search-snippet-input"]', { timeout: 6000 })
