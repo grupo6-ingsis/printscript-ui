@@ -55,9 +55,7 @@ describe('Add snippet tests', () => {
       cy.get('#name').should('have.value', 'example');
       cy.get('#description').type('This is a test description');
       // Wait for button to be enabled before clicking
-      cy.contains('button', 'Save Snippet')
-          .then($btn => $btn[0].disabled = false)
-          .click();
+      cy.contains('button', 'Save Snippet').should('be.visible').should('not.be.disabled').click({ force: true });
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
 })
