@@ -15,6 +15,7 @@ describe('Home', () => {
 
     it('Renders home', () => {
         cy.visit("http://localhost");
+        console.log("Visiting home page");
 
         // Header visible
         cy.get('.MuiTypography-h6')
