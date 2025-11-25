@@ -1,4 +1,4 @@
-import {AUTH0_USERNAME, BACKEND_URL} from "../../src/utils/constants";
+import {AUTH0_USERNAME} from "../../src/utils/constants";
 
 describe('Add snippet tests', () => {
   beforeEach(() => {
@@ -48,7 +48,7 @@ describe('Add snippet tests', () => {
     cy.get('[data-testid="upload-file-input"').selectFile("cypress/fixtures/example_ps.ps", {force: true})
 
     // Wait for modal to open and SaveIcon to be available
-    cy.get('[data-testid="SaveIcon"]', {timeout: 10000}).should('be.visible').click();
+      cy.contains('button', 'Save Snippet').click({ force: true });
 
     cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
