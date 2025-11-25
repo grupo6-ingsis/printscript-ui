@@ -30,9 +30,8 @@ describe('Add snippet tests', () => {
       cy.get('#description').type('This is a test description');
       cy.get('[data-testid="add-snippet-code-editor"]').click();
     cy.get('[data-testid="add-snippet-code-editor"]').type(`const snippet: String = "some snippet" \n print(snippet)`);
-    cy.get('[data-testid="SaveIcon"]').click();
-
-    cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
+      cy.contains('button', 'Save Snippet').click();
+      cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
 
   it('Can add snippets via file', () => {
