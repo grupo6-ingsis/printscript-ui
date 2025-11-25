@@ -39,7 +39,7 @@ describe('Add snippet tests', () => {
     cy.visit("/")
     cy.intercept('POST', '**/service/snippets', (req) => {
       req.reply((res) => {
-          expect(res.body).to.include.keys("id", "title", "description", "languageVersion");
+          expect(res.body).to.include.keys("versions", "languageVersion");
         expect(res.statusCode).to.eq(200);
       });
     }).as('postRequest');
