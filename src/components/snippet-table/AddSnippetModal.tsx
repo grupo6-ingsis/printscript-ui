@@ -111,12 +111,17 @@ export const AddSnippetModal = ({open, onClose, defaultSnippet}: {
                         transitionDuration: 0
                     }}
                 >
-                {fileTypes?.map((x) => (
-                        <MenuItem key={x.language} value={x.language}>
+                    {fileTypes?.map((x) => (
+                        <MenuItem
+                            key={x.language}
+                            value={x.language}
+                            data-testid={`language-option-${x.language}`} // <- agregado
+                        >
                             {capitalize(x.language)}
                         </MenuItem>
                     ))}
                 </Select>
+
                 <InputLabel htmlFor="version-select">Versions</InputLabel>
                 {loadingVersions ? (
                     <CircularProgress />
