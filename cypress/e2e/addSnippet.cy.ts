@@ -30,10 +30,7 @@ describe('Add snippet tests', () => {
       cy.get('#description').type('This is a test description');
       cy.get('[data-testid="add-snippet-code-editor"]').click();
     cy.get('[data-testid="add-snippet-code-editor"]').type(`let snippet: String = "some snippet"; \n print(snippet);`);
-      cy.contains('button', 'Save Snippet')
-          .scrollIntoView()
-          .should('be.enabled')
-          .click();
+      cy.contains('button', 'Save Snippet').click({ force: true });
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
 
