@@ -50,7 +50,7 @@ describe('Add snippet tests', () => {
           .should('be.visible')
           .click();
       cy.get('[data-testid="upload-file-input"]')
-          .selectFile('cypress/fixtures/test-snippet.ts', { force: true });
+          .selectFile('cypress/fixtures/example.ts', { force: true });
       cy.contains('button', 'Save Snippet').click({ force: true });
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
