@@ -12,12 +12,16 @@ describe('Add snippet tests', () => {
   })
   it('Can add snippets manually', () => {
     cy.visit("/")
-    cy.intercept('POST', BACKEND_URL+"/snippets", (req) => {
-      req.reply((res) => {
-        expect(res.body).to.include.keys("id","name","content","language")
-        expect(res.statusCode).to.eq(200);
-      });
-    }).as('postRequest');
+      cy.intercept(
+          'POST',
+          'https://snippet-searcher-app-dev.duckdns.org/service/snippets',
+          (req) => {
+              req.reply((res) => {
+                  expect(res.body).to.include.keys("id", "name", "content", "language");
+                  expect(res.statusCode).to.eq(200);
+              });
+          }
+      ).as('postRequest');
 
     /* ==== Generated with Cypress Studio ==== */
       cy.contains('button', 'Add Snippet').click();
