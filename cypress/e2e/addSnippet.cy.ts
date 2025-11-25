@@ -12,14 +12,23 @@ describe('Add snippet tests', () => {
   })
   it('Can add snippets manually', () => {
     cy.visit("/")
-    cy.intercept('POST', '**/service/snippets', (req) => {
-      req.reply((res) => {
-        expect(res.body).to.include.keys("id","name","content","language")
-        expect(res.statusCode).to.eq(200);
-      });
-    }).as('postRequest');
+      cy.intercept('POST', '**/service/snippets', (req) => {
+          req.reply((res) => {
+              expect(res.statusCode).to.eq(200);
+              expect(res.body).to.include.keys(
+                  "id",
+                  "name",
+                  "content",
+                  "language",
+                  "extension",
+                  "version",
+                  "description"
+              );
+          });
+      }).as('postRequest');
 
-    /* ==== Generated with Cypress Studio ==== */
+
+      /* ==== Generated with Cypress Studio ==== */
       cy.contains('button', 'Add Snippet').click();
       cy.contains('Create snippet').click();
     cy.get('#name').type('Some snippet name');
