@@ -29,7 +29,7 @@ describe('Add snippet tests', () => {
           .click();
       cy.get('#description').type('This is a test description');
       cy.get('[data-testid="add-snippet-code-editor"]').click();
-    cy.get('[data-testid="add-snippet-code-editor"]').type(`let snippet: String = "some snippet"; \n print(snippet);`);
+    cy.get('[data-testid="add-snippet-code-editor"]').type(`let snippet: String = "some snippet"; \nprintln(snippet);`);
       cy.contains('button', 'Save Snippet').click({ force: true });
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
