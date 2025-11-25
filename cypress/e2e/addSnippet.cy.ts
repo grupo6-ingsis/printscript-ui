@@ -37,9 +37,9 @@ describe('Add snippet tests', () => {
 
   it('Can add snippets via file', () => {
     cy.visit("/")
-    cy.intercept('POST', BACKEND_URL+"/snippets", (req) => {
+    cy.intercept('POST', '**/service/snippets', (req) => {
       req.reply((res) => {
-        expect(res.body).to.include.keys("id","name","content","language")
+          expect(res.body).to.include.keys("id", "title", "description", "languageVersion");
         expect(res.statusCode).to.eq(200);
       });
     }).as('postRequest');
