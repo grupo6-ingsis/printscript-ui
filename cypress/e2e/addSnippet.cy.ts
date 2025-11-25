@@ -27,7 +27,7 @@ describe('Add snippet tests', () => {
       cy.get('.MuiPopover-root ul[role="listbox"]', { timeout: 8000 })
           .should('be.visible')
           .click();
-
+      cy.get('#description').type('This is a test description');
       cy.get('[data-testid="add-snippet-code-editor"]').click();
     cy.get('[data-testid="add-snippet-code-editor"]').type(`const snippet: String = "some snippet" \n print(snippet)`);
     cy.get('[data-testid="SaveIcon"]').click();
