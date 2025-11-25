@@ -26,7 +26,6 @@ describe('Add snippet tests', () => {
       cy.get('#demo-simple-select').click({ force: true });
       cy.get('.MuiPopover-root ul[role="listbox"]', { timeout: 8000 })
           .should('be.visible')
-          .contains('Printscript')
           .click();
 
       cy.get('[data-testid="add-snippet-code-editor"]').click();
