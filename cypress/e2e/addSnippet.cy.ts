@@ -46,6 +46,21 @@ describe('Add snippet tests', () => {
 
     /* ==== Generated with Cypress Studio ==== */
     cy.get('[data-testid="upload-file-input"').selectFile("cypress/fixtures/example_ps.ps", {force: true})
+      // 2. Igual que en "manual": rellenar campos necesarios
+      cy.get('#name').type('example_ps');
+
+      // Abrir dropdown Language
+      cy.get('#demo-simple-select').click({ force: true });
+
+      // Seleccionar la primera opción disponible (igual que en el manual)
+      cy.get('.MuiPopover-root ul[role="listbox"]', { timeout: 8000 })
+          .should('be.visible')
+          .within(() => {
+              cy.get('li').first().click({ force: true });
+          });
+
+      // 3. Description
+      cy.get('#description').type('Uploaded via file');
 
     // Wait for modal to open and SaveIcon to be available
       cy.contains('button', 'Save Snippet').click({ force: true });
