@@ -29,7 +29,7 @@ describe('Add snippet tests', () => {
           .click();
       cy.get('#description').type('This is a test description');
       cy.get('[data-testid="add-snippet-code-editor"]').click();
-    cy.get('[data-testid="add-snippet-code-editor"]').type(`const snippet: String = "some snippet" \n print(snippet)`);
+    cy.get('[data-testid="add-snippet-code-editor"]').type(`let snippet: String = "some snippet;" \n print(snippet);`);
       cy.contains('button', 'Save Snippet')
           .scrollIntoView()
           .should('be.enabled')
