@@ -51,8 +51,11 @@ describe('Add snippet tests', () => {
           .click();
       cy.get('[data-testid="upload-file-input"]')
           .selectFile('cypress/fixtures/example.ps', { force: true });
+      // Wait for the modal to populate with file data
+      cy.get('#name').should('have.value', 'example');
       cy.get('#description').type('This is a test description');
-      cy.contains('button', 'Save Snippet').should('be.visible').should('not.be.disabled').click();
+      // Wait for button to be enabled before clicking
+      cy.contains('button', 'Save Snippet').should('be.visible').should('not.be.disabled').click({ force: true });
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
 })
