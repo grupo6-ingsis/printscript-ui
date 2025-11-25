@@ -57,7 +57,7 @@ describe('Home', () => {
         // IMPORTANTE: cy.request requiere URL absoluta
         cy.request({
             method: 'POST',
-            url: `${Cypress.env("BACKEND_URL")}/service/snippets`,
+            url: `${Cypress.env("http://localhost")}/service/snippets`,
             body: snippetData,
             failOnStatusCode: false
         }).then((response) => {

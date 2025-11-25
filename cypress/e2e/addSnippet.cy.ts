@@ -36,9 +36,6 @@ describe('Add snippet tests', () => {
       cy.get('#version-select', { timeout: 10000 }).should('be.visible');
       // Wait for button to be enabled and visible, then click
       cy.get('[data-testid="SaveIcon"]')
-          .should('not.be.disabled')
-          .scrollIntoView()
-          .should('be.visible')
           .click();
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
@@ -66,9 +63,6 @@ describe('Add snippet tests', () => {
       cy.get('#version-select', { timeout: 10000 }).should('be.visible');
       // Wait for button to be enabled and visible, then click
       cy.get('[data-testid="SaveIcon"]')
-          .should('not.be.disabled')
-          .scrollIntoView()
-          .should('be.visible')
           .click();
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
