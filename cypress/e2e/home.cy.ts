@@ -1,11 +1,10 @@
-import {AUTH0_PASSWORD, AUTH0_USERNAME, BACKEND_URL, FRONTEND_URL} from "../../src/utils/constants";
 import {CreateSnippet} from "../../src/utils/snippet";
 
 describe('Home', () => {
   beforeEach(() => {
     cy.loginToAuth0(
-        AUTH0_USERNAME,
-        AUTH0_PASSWORD
+        "pit@mail.com",
+        "Boca123!"
     )
   })
   before(() => {
@@ -15,7 +14,7 @@ describe('Home', () => {
     process.env.AUTH0_PASSWORD = Cypress.env("AUTH0_PASSWORD");
   })
   it('Renders home', () => {
-    cy.visit(FRONTEND_URL)
+    cy.visit("http://localhost")
     /* ==== Generated with Cypress Studio ==== */
     cy.get('.MuiTypography-h6').should('have.text', 'Printscript');
     cy.get('.MuiBox-root > .MuiInputBase-root > .MuiInputBase-input').should('be.visible');
@@ -26,7 +25,7 @@ describe('Home', () => {
 
   // You need to have at least 1 snippet in your DB for this test to pass
   it('Renders the first snippets', () => {
-    cy.visit(FRONTEND_URL)
+    cy.visit("http://localhost")
     const first10Snippets = cy.get('[data-testid="snippet-row"]')
 
     first10Snippets.should('have.length.greaterThan', 0)
@@ -35,15 +34,17 @@ describe('Home', () => {
   })
 
   it('Can creat snippet find snippets by name', () => {
-    cy.visit(FRONTEND_URL)
+    cy.visit("http://localhost")
     const snippetData: CreateSnippet = {
       name: "Test name",
-      content: "print(1)",
+      content: "println(1);",
       language: "printscript",
-      extension: ".ps"
+      extension: ".ps",
+        version: "1.0",
+        description: "hola"
     }
 
-    cy.intercept('GET', BACKEND_URL+"/snippets*", (req) => {
+    cy.intercept('GET', '**/service/snippets', (req) => {
       req.reply((res) => {
         expect(res.statusCode).to.eq(200);
       });
