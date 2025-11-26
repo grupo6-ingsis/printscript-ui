@@ -42,6 +42,11 @@ describe('Add snippet tests', () => {
 
   it('Can add snippets via file', () => {
     cy.visit("/")
+    
+    // Wait for file types to be loaded before attempting to upload
+    cy.intercept('GET', '**/service/language/supported').as('getFileTypes');
+    cy.wait('@getFileTypes', { timeout: 10000 });
+    
     cy.intercept('POST', '**/service/snippets', (req) => {
       req.reply((res) => {
           expect(res.body).to.include.keys("id");
@@ -54,15 +59,33 @@ describe('Add snippet tests', () => {
       cy.contains('li', 'Load snippet from file')
           .should('be.visible')
           .click();
+      
+      // Wait a bit to ensure file types are available in the component state
+      cy.wait(500);
+      
       cy.get('[data-testid="upload-file-input"]')
           .selectFile('cypress/fixtures/example.ps', { force: true });
-      // Wait for the modal to populate with file data
-      cy.get('#name').should('have.value', 'example');
+      // Wait for the modal to open and populate with file data
+      cy.get('#name', { timeout: 10000 }).should('have.value', 'example');
+      
+      // Wait for language to be selected (it should be auto-detected from file extension)
+      cy.get('#demo-simple-select', { timeout: 10000 }).should('not.have.value', '');
+      
+      // Wait for content to be loaded in editor
+      cy.get('[data-testid="add-snippet-code-editor"]', { timeout: 10000 })
+          .should('not.be.empty');
+      
+      // Wait for language versions to load and be selected automatically
+      cy.get('#version-select', { timeout: 10000 })
+          .should('be.visible')
+          .should('not.have.value', '');
+      
       cy.get('#description').type('This is a test description');
-      // Wait for language versions to load and be selected
-      cy.get('#version-select', { timeout: 10000 }).should('be.visible');
-      // Wait for button to be enabled and visible, then click
-      cy.get('[data-testid="SaveIcon"]')
+      
+      // Wait for button to be enabled (not disabled) before clicking
+      cy.get('[data-testid="SaveIcon"]', { timeout: 10000 })
+          .should('not.be.disabled')
+          .should('be.visible')
           .click();
       cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
   })
