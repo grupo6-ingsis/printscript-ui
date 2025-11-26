@@ -33,10 +33,10 @@ describe('Home', () => {
     it('Renders the first snippets', () => {
         cy.visit("http://localhost");
 
-        const first10Snippets = cy.get('[data-testid="snippet-row"]');
+        const first20Snippets = cy.get('[data-testid="snippet-row"]');
 
-        first10Snippets.should('have.length.greaterThan', 0);
-        first10Snippets.should('have.length.lessThan', 10);
+        first20Snippets.should('have.length.greaterThan', 0);
+        first20Snippets.should('have.length.lessThan', 20);
     });
 
     it('Can create snippet and find it by name', () => {
