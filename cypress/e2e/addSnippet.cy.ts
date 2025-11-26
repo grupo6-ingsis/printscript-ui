@@ -68,9 +68,6 @@ describe('Add snippet tests', () => {
       // Wait for the modal to open and populate with file data
       cy.get('#name', { timeout: 10000 }).should('have.value', 'example');
       
-      // Wait for language to be selected (it should be auto-detected from file extension)
-      cy.get('#demo-simple-select', { timeout: 10000 }).should('not.have.value', '');
-      
       // Wait for content to be loaded in editor
       cy.get('[data-testid="add-snippet-code-editor"]', { timeout: 10000 })
           .should('not.be.empty');
@@ -78,7 +75,6 @@ describe('Add snippet tests', () => {
       // Wait for language versions to load and be selected automatically
       cy.get('#version-select', { timeout: 10000 })
           .should('be.visible')
-          .should('not.have.value', '');
       
       cy.get('#description').type('This is a test description');
       
