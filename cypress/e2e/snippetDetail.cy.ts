@@ -11,9 +11,7 @@ describe('Add snippet tests', () => {
     cy.visit("/");
     cy.wait('@getSnippetsPaginated');
     cy.wait(2000);
-    // Click en la primera fila de la tabla de snippets
-    cy.get('.MuiTableBody-root > tr').first().click();
-    // Espera extra para que cargue el detalle del snippet
+    cy.get('.MuiTableBody-root > tr').contains('td', 'Pedro').parent().click();
     cy.wait(4000);
   });
 
