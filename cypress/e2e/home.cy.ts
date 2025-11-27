@@ -102,7 +102,7 @@ describe('Home', () => {
                         expect(response.status).to.eq(200);
 
                         expect(response.body.title).to.eq(snippetData.name);
-                        expect(response.body.languageVersion.language).to.eq(snippetData.language);
+                        expect(response.body.languageVersion.language.name).to.eq(snippetData.language);
                         expect(response.body).to.have.property("id");
 
                         // Buscar snippet por nombre
