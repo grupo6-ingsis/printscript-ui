@@ -2,14 +2,13 @@ import {AUTH0_USERNAME,AUTH0_PASSWORD, AUTH0_DOMAIN} from "../../src/utils/const
 
 describe('Protected routes test', () => {
   it('should redirect to Auth0 when accessing a protected route unauthenticated', () => {
-    // Visit the protected route
+    // Visit the protected route - it will automatically redirect to Auth0
     cy.visit('/');
 
-    // Wait for redirect to Auth0
-    cy.wait(2000);
-
-    // Check if the URL is redirected to Auth0 login page (not local /login)
-    cy.url().should('include', AUTH0_DOMAIN.replace('https://', ''));
+    // After redirect to Auth0, verify we're on Auth0 login page using cy.origin
+    cy.origin(AUTH0_DOMAIN, () => {
+      cy.url({ timeout: 10000 }).should('include', '/u/login');
+    });
   });
 
   it('should display login content on Auth0', () => {
