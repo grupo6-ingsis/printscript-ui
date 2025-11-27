@@ -20,11 +20,12 @@ describe('Add snippet tests', () => {
   it('Can share a snippet ', () => {
     // Click en el botón de compartir (Share)
     cy.get('[data-testid="ShareIcon"]').click({ force: true });
-    // Selecciona el usuario (ajusta el selector si es necesario)
-    cy.get('[data-testid="ShareUserSelect"]').click({ force: true });
-    cy.get('[data-testid="ShareUserOption"]').first().click({ force: true });
-    // Click en el botón de confirmar compartir
-    cy.get('[data-testid="ShareConfirmButton"]').click({ force: true });
+    // Escribe en el autocomplete para buscar usuarios
+    cy.get('.MuiAutocomplete-root input').type('a', { force: true }); // escribe una letra para que aparezcan opciones
+    // Espera y selecciona la primera opción del dropdown de MUI
+    cy.get('.MuiAutocomplete-popper li').first().click({ force: true });
+    // Click en el botón de confirmar compartir (por texto)
+    cy.contains('button', 'Share').click({ force: true });
     cy.wait(2000);
   });
 
