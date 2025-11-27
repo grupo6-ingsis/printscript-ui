@@ -32,11 +32,13 @@ describe('Add snippet tests', () => {
   it('Can run snippets', function() {
     // Click en el botón de ejecutar (Interpretar sin inputs)
     cy.contains('button', 'Interpretar sin inputs').click({ force: true });
+    cy.wait(2000);
   });
 
   it('Can format snippets', function() {
     // Click en el botón de formatear (Format)
     cy.get('[data-testid="ReadMoreIcon"]').click({ force: true });
+    cy.wait(2000);
   });
 
   it('Can save snippets', function() {
