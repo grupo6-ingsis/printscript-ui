@@ -1,26 +1,33 @@
-import {AUTH0_USERNAME,AUTH0_PASSWORD} from "../../src/utils/constants";
+import {AUTH0_USERNAME,AUTH0_PASSWORD, AUTH0_DOMAIN} from "../../src/utils/constants";
 
 describe('Protected routes test', () => {
-  it('should redirect to login when accessing a protected route unauthenticated', () => {
+  it('should redirect to Auth0 when accessing a protected route unauthenticated', () => {
     // Visit the protected route
     cy.visit('/');
 
-    cy.wait(1000)
+    // Wait for redirect to Auth0
+    cy.wait(2000);
 
-    // Check if the URL is redirected to the login page
-    cy.url().should('include', '/login');
+    // Check if the URL is redirected to Auth0 login page (not local /login)
+    cy.url().should('include', AUTH0_DOMAIN.replace('https://', ''));
   });
 
-  it('should display login content', () => {
-    // Visit the login page
-    cy.visit('/login');
+  it('should display login content on Auth0', () => {
+    // Visit the protected route to trigger Auth0 redirect
+    cy.visit('/');
+    
+    // Wait for redirect to Auth0
+    cy.wait(2000);
 
-    // Look for text that is likely to appear on a login page
-    cy.contains('Log in').should('exist');
-    cy.contains('Password').should('exist'); // Adjust the text based on actual content
+    // Use cy.origin to interact with Auth0 domain
+    cy.origin(AUTH0_DOMAIN, { args: {} }, () => {
+      // Look for text that appears on Auth0 login page
+      cy.contains('Email address', { timeout: 10000 }).should('exist');
+      cy.contains('Password', { timeout: 10000 }).should('exist');
+    });
   });
 
-  it('should not redirect to login when the user is already authenticated', () => {
+  it('should not redirect to Auth0 when the user is already authenticated', () => {
     cy.loginToAuth0(
         AUTH0_USERNAME,
         AUTH0_PASSWORD
@@ -30,8 +37,9 @@ describe('Protected routes test', () => {
 
     cy.wait(1000)
 
-    // Check if the URL is redirected to the login page
-    cy.url().should('not.include', '/login');
+    // Check that we're still on localhost (not redirected to Auth0)
+    cy.url().should('equal', 'http://localhost/');
+    cy.url().should('not.include', AUTH0_DOMAIN.replace('https://', ''));
   });
 
 })
