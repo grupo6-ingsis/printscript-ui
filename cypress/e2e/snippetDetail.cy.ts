@@ -1,25 +1,19 @@
 import {AUTH0_PASSWORD, AUTH0_USERNAME} from "../../src/utils/constants";
-import {FakeSnippetStore} from "../../src/utils/mock/fakeSnippetStore";
 
 describe('Add snippet tests', () => {
-  const fakeStore = new FakeSnippetStore()
   beforeEach(() => {
     cy.loginToAuth0(
         AUTH0_USERNAME,
         AUTH0_PASSWORD
-    )
-    cy.intercept('GET', "/snippets/*", {
-      statusCode: 201,
-      body: fakeStore.getSnippetById("1"),
-    }).as("getSnippetById")
-    cy.intercept('GET', "/snippets").as("getSnippets")
-
-    cy.visit("/")
-
-    cy.wait("@getSnippets")
-    cy.wait(2000)
-    cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(1)').click();
-  })
+    );
+    // Intercepta el GET paginado real
+    cy.intercept('GET', '**/service/snippets/paginated*').as('getSnippetsPaginated');
+    cy.visit("/");
+    cy.wait('@getSnippetsPaginated');
+    cy.wait(2000);
+    // Click en la primera fila de la tabla de snippets
+    cy.get('.MuiTableBody-root > tr').first().click();
+  });
 
   it('Can share a snippet ', () => {
     // Click en el botón de compartir (Share)
