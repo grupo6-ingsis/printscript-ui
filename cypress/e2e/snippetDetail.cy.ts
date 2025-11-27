@@ -44,7 +44,7 @@ describe('Add snippet tests', () => {
   it('Can save snippets', function() {
     // Click en el editor de código
     cy.get('.npm__react-simple-code-editor__textarea').first().click();
-    cy.get('.npm__react-simple-code-editor__textarea').first().type('Some new line', { force: true });
+    cy.get('.npm__react-simple-code-editor__textarea').first().type('\nprintln(2);', { force: true });
     // Intercepta la request PUT a la URL hardcodeada
     cy.intercept('PUT', '**/service/snippets/*').as('saveSnippet');
     // Click en el botón de guardar

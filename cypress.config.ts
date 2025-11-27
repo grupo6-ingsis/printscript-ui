@@ -11,6 +11,6 @@ export default defineConfig({
     experimentalStudio: true,
     baseUrl: process.env.FRONTEND_URL ?? "http://localhost",
       viewportWidth: 1600,   // Increase width
-      viewportHeight: 1000,  // Increase height
+      viewportHeight: 1300,  // Increase height
   },
 });
