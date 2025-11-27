@@ -56,7 +56,7 @@ describe('Add snippet tests', () => {
   it('Can delete snippets', function() {
     // Click en el icono de borrar
     cy.get('[data-testid="DeleteIcon"]').click({ force: true });
-    // Click en el botón de confirmación de borrado (ajusta el data-testid si es necesario)
-    cy.get('[data-testid="DeleteConfirmButton"]').click({ force: true });
+    // Click en el botón de confirmación de borrado (por texto, ya que no tiene data-testid)
+    cy.contains('button', 'Delete').click({ force: true });
   });
 })
