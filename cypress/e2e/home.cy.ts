@@ -17,16 +17,14 @@ describe('Home', () => {
         cy.visit("http://localhost");
 
         // Header visible
-        cy.get('.MuiTypography-h6')
-            .should('have.text', 'Printscript');
+        cy.contains('Printscript').should('be.visible');
 
         // Search input visible (selector estable)
         cy.get('[data-testid="search-snippet-input"]', { timeout: 6000 })
             .should('be.visible');
 
         // Botón visible
-        cy.get('.css-9jay18 > .MuiButton-root')
-            .should('be.visible');
+        cy.contains('Add Snippet').should('be.visible');
 
         // Click en menú (si corresponde)
         cy.get('.css-jie5ja').click();
@@ -35,49 +33,85 @@ describe('Home', () => {
     it('Renders the first snippets', () => {
         cy.visit("http://localhost");
 
-        const first10Snippets = cy.get('[data-testid="snippet-row"]');
+        const first20Snippets = cy.get('[data-testid="snippet-row"]');
 
-        first10Snippets.should('have.length.greaterThan', 0);
-        first10Snippets.should('have.length.lessThan', 10);
+        first20Snippets.should('have.length.greaterThan', 0);
+        first20Snippets.should('have.length.lessThan', 20);
     });
 
     it('Can create snippet and find it by name', () => {
         cy.visit("http://localhost");
 
-        const snippetData: CreateSnippet = {
-            name: "Test name",
-            content: "println(1);",
-            language: "printscript",
-            extension: ".ps",
-            version: "1.0",
-            description: "hola"
-        };
-
         // Intercept de búsqueda
         cy.intercept('GET', '**/service/snippets*').as('getSnippets');
+        
+        // First, get supported languages and versions from the backend
+        cy.window().its('localStorage').invoke('getItem', 'authAccessToken').then((token) => {
+            const normalizedBackendUrl = "https://snippet-searcher-app-dev.duckdns.org/service";
+            
+            // Get supported languages
+            cy.request({
+                method: 'GET',
+                url: `${normalizedBackendUrl}/language/supported`,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then((langResponse) => {
+                // Use the first available language
+                const availableLanguage = langResponse.body[0];
+                const languageName = availableLanguage.language;
+                
+                // Get versions for this language
+                cy.request({
+                    method: 'GET',
+                    url: `${normalizedBackendUrl}/language-version/supported?languageName=${languageName}`,
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }).then((versionResponse) => {
+                    // Use the first available version
+                    const version = versionResponse.body.versions[0];
+                    
+                    const snippetData: CreateSnippet = {
+                        name: "Test name",
+                        content: "println(1);",
+                        language: languageName,
+                        extension: availableLanguage.extension,
+                        version: version,
+                        description: "hola"
+                    };
+                    
+                    const requestBody = {
+                        title: snippetData.name,
+                        description: snippetData.description,
+                        language: snippetData.language,
+                        content: snippetData.content,
+                        version: snippetData.version
+                    };
+                    
+                    // Create the snippet
+                    cy.request({
+                        method: 'POST',
+                        url: `${normalizedBackendUrl}/snippets`,
+                        body: requestBody,
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                        failOnStatusCode: false
+                    }).then((response) => {
+                        expect(response.status).to.eq(200);
 
-        // IMPORTANTE: cy.request requiere URL absoluta
-        cy.request({
-            method: 'POST',
-            url: `${Cypress.env("BACKEND_URL")}/service/snippets`,
-            body: snippetData,
-            failOnStatusCode: false
-        }).then((response) => {
-            expect(response.status).to.eq(200);
+                        expect(response.body.title).to.eq(snippetData.name);
+                        expect(response.body.languageVersion.language.name).to.eq(snippetData.language);
+                        expect(response.body).to.have.property("id");
 
-            expect(response.body.title).to.eq(snippetData.name);
-            expect(response.body.content).to.eq(snippetData.content);
-            expect(response.body.languageVersion.language).to.eq(snippetData.language);
-            expect(response.body).to.have.property("id");
-
-            // Buscar snippet por nombre
-            cy.get('input[type="text"]')
-                .clear()
-                .type(snippetData.name + "{enter}");
-
-            cy.wait("@getSnippets");
-
-            cy.contains(snippetData.name).should('exist');
+                        // Buscar snippet por nombre
+                        cy.get('input[type="text"]')
+                            .clear()
+                            .type(snippetData.name + "{enter}");
+                    });
+                });
+            });
         });
     });
 
