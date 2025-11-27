@@ -54,14 +54,26 @@ describe('Home', () => {
         // Intercept de búsqueda
         cy.intercept('GET', '**/service/snippets*').as('getSnippets');
 
-        // IMPORTANTE: cy.request requiere URL absoluta
-        const normalizedBackendUrl = "https://snippet-searcher-app-dev.duckdns.org/service";
-        cy.request({
-            method: 'POST',
-            url: `${normalizedBackendUrl}/snippets`,
-            body: snippetData,
-            failOnStatusCode: false
-        }).then((response) => {
+        // Get the auth token from localStorage
+        cy.window().its('localStorage').invoke('getItem', 'authAccessToken').then((token) => {
+            const requestBody = {
+                title: snippetData.name,
+                description: snippetData.description,
+                language: snippetData.language,
+                content: snippetData.content,
+                version: snippetData.version
+            };
+            
+            const normalizedBackendUrl = "https://snippet-searcher-app-dev.duckdns.org/service";
+            cy.request({
+                method: 'POST',
+                url: `${normalizedBackendUrl}/snippets`,
+                body: requestBody,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                failOnStatusCode: false
+            }).then((response) => {
             expect(response.status).to.eq(200);
 
             expect(response.body.title).to.eq(snippetData.name);
@@ -77,6 +89,7 @@ describe('Home', () => {
             cy.wait("@getSnippets");
 
             cy.contains(snippetData.name).should('exist');
+            });
         });
     });
 
