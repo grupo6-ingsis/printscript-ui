@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: "https://snippet-searcher-app-dev.duckdns.org/service",
+    baseURL: "https://snippet-searcher-app.duckdns.org/service",
     headers: {
         'Content-Type': 'application/json',
     },
