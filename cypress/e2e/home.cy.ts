@@ -47,11 +47,12 @@ describe('Home', () => {
         
         // First, get supported languages and versions from the backend
         cy.window().its('localStorage').invoke('getItem', 'authAccessToken').then((token) => {
+            const normalizedBackendUrl = "https://snippet-searcher-app-dev.duckdns.org/service";
             
             // Get supported languages
             cy.request({
                 method: 'GET',
-                url: `**/service/language/supported`,
+                url: `${normalizedBackendUrl}/language/supported`,
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -63,7 +64,7 @@ describe('Home', () => {
                 // Get versions for this language
                 cy.request({
                     method: 'GET',
-                    url: `**/service/language-version/supported?languageName=${languageName}`,
+                    url: `${normalizedBackendUrl}/language-version/supported?languageName=${languageName}`,
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -91,7 +92,7 @@ describe('Home', () => {
                     // Create the snippet
                     cy.request({
                         method: 'POST',
-                        url: `**/service/snippets`,
+                        url: `${normalizedBackendUrl}/snippets`,
                         body: requestBody,
                         headers: {
                             'Authorization': `Bearer ${token}`
