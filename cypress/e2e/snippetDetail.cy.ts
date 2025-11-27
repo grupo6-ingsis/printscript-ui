@@ -13,6 +13,8 @@ describe('Add snippet tests', () => {
     cy.wait(2000);
     // Click en la primera fila de la tabla de snippets
     cy.get('.MuiTableBody-root > tr').first().click();
+    // Espera extra para que cargue el detalle del snippet
+    cy.wait(4000);
   });
 
   it('Can share a snippet ', () => {
