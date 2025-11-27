@@ -30,10 +30,10 @@ describe('Add snippet tests', () => {
   });
 
   it('Can run snippets', function() {
-    // Click en el botón de ejecutar (Run)
-    cy.get('[data-testid="PlayArrowIcon"]').click({ force: true });
-    // Verifica que el editor esté presente
-    cy.get('.npm__react-simple-code-editor__textarea').should("have.length.greaterThan",0);
+    // Click en el botón de ejecutar (Interpretar sin inputs)
+    cy.contains('button', 'Interpretar sin inputs').click({ force: true });
+    // Verifica que en Output aparezca el valor 2
+    cy.contains('Output').parent().should('contain.text', '2');
   });
 
   it('Can format snippets', function() {
