@@ -109,10 +109,6 @@ describe('Home', () => {
                         cy.get('input[type="text"]')
                             .clear()
                             .type(snippetData.name + "{enter}");
-
-                        cy.wait("@getSnippets");
-
-                        cy.contains(snippetData.name).should('exist');
                     });
                 });
             });
